@@ -29,6 +29,13 @@
   var header = $('#site-header');
   var hero = $('#hero');
   var fcta = $('.float-cta');
+
+  var introWait = !!hero && !document.documentElement.classList.contains('intro-done');
+  if (introWait) {
+    var introOver = function () { if (!introWait) return; introWait = false; onScroll(); };
+    document.addEventListener('min:intro-done', introOver);
+    setTimeout(introOver, 5000);
+  }
   var chapters = $$('.chapter'), chapterNav = $$('.chapter-nav li');
   var ticking = false;
 
@@ -47,7 +54,7 @@
 
     if (fcta) {
       var near = $$('.contact-head, .site-footer').some(function (el) { var b = el.getBoundingClientRect(); return b.top < vh - 40 && b.bottom > 0; });
-      fcta.classList.toggle('show', !near);
+      fcta.classList.toggle('show', !near && !introWait);
     }
 
     if (statement && words.length) {

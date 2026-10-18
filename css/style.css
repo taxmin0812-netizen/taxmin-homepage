@@ -1245,3 +1245,6 @@ p, .lead, .page-lead { text-wrap: pretty; }
 @media (max-width: 560px) { .visit-list > div { grid-template-columns: 64px minmax(0, 1fr); font-size: 15px; } .visit-cta .btn { width: 100%; } }
 .wrap.visit { background: none; border: 0; border-radius: 0; padding-top: 0; padding-bottom: 0; }
 .visit-list > div { border-bottom: 0; }
+
+.section.yt-first { padding-top: 26px; }
+@media (max-width: 640px) { .section.yt-first { padding-top: 14px; } }

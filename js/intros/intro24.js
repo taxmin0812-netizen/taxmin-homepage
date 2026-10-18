@@ -16,32 +16,32 @@
     { key: 'receipt', rect: [-20, 0, 40, 232], pivot: [38, 35], back: [0.965, 0.972, 0.984],
       uv: function (x, y) { return [(x + 20) / 60, y / 232]; },
       folds: [
-        { p: [0, 0], d: [0, 1], m: [-10, 50], t: [0.52, 0.88] },
-        { p: [20, 0], d: [0, 1], m: [30, 50], t: [0.88, 1.24] },
-        { p: [0, 50], d: [1, 1], m: [0, 200], t: [1.80, 2.12] },
-        { p: [56, 70], d: [1, -1], m: [200, 200], t: [2.12, 2.44] },
-        { p: [56, 0], d: [1, 1], m: [100, -100], t: [2.44, 2.76] }
+        { p: [0, 0], d: [0, 1], m: [-10, 50], t: [0.42, 0.70] },
+        { p: [20, 0], d: [0, 1], m: [30, 50], t: [0.70, 0.99] },
+        { p: [0, 50], d: [1, 1], m: [0, 200], t: [1.44, 1.70] },
+        { p: [56, 70], d: [1, -1], m: [200, 200], t: [1.70, 1.95] },
+        { p: [56, 0], d: [1, 1], m: [100, -100], t: [1.95, 2.21] }
       ],
       wide: { c: [-38, 70], r: 8 }, tall: { c: [8, 32], r: 7 },
-      enter: { d: [-170, 120], r: 14, t: 0.00 }, move: [1.30, 3.05], seed: 1.3 },
+      enter: { d: [-170, 120], r: 14, t: 0.00 }, move: [1.04, 2.44], seed: 1.3 },
     { key: 'card', rect: [76, -10, 136, 178], pivot: [106, 37], back: [0.955, 0.965, 0.98],
       uv: function (x, y) { return [(x - 76) / 60, (y + 10) / 188]; },
       folds: [
-        { p: [0, 84], d: [1, 0], m: [106, 150], t: [0.64, 1.04] },
-        { p: [96, 0], d: [0, 1], m: [86, 0], t: [1.10, 1.42] },
-        { p: [116, 0], d: [0, 1], m: [126, 0], t: [1.42, 1.74] }
+        { p: [0, 84], d: [1, 0], m: [106, 150], t: [0.51, 0.83] },
+        { p: [96, 0], d: [0, 1], m: [86, 0], t: [0.88, 1.14] },
+        { p: [116, 0], d: [0, 1], m: [126, 0], t: [1.14, 1.39] }
       ],
       wide: { c: [92, 40], r: -6 }, tall: { c: [114, 26], r: -6 },
-      enter: { d: [30, 240], r: -12, t: 0.07 }, move: [1.55, 3.10], seed: 2.7 },
+      enter: { d: [30, 240], r: -12, t: 0.06 }, move: [1.24, 2.48], seed: 2.7 },
     { key: 'slip', rect: [16, 88, 96, 216], pivot: [68, 110], back: [0.925, 0.945, 0.99],
       uv: function (x, y) { return [(y - 88) / 128, (96 - x) / 80]; },
       folds: [
-        { p: [56, 0], d: [0, 1], m: [76, 0], t: [0.74, 1.10] },
-        { p: [36, 0], d: [0, 1], m: [46, 0], t: [1.10, 1.46] },
-        { p: [16, 112], d: [1, 1], m: [16, 200], t: [2.25, 2.60] }
+        { p: [56, 0], d: [0, 1], m: [76, 0], t: [0.59, 0.88] },
+        { p: [36, 0], d: [0, 1], m: [46, 0], t: [0.88, 1.17] },
+        { p: [16, 112], d: [1, 1], m: [16, 200], t: [1.80, 2.08] }
       ],
       wide: { c: [206, 112], r: 84 }, tall: { c: [56, 224], r: 86 },
-      enter: { d: [190, 110], r: 12, t: 0.14 }, move: [1.45, 3.15], seed: 4.1 }
+      enter: { d: [190, 110], r: 12, t: 0.11 }, move: [1.16, 2.52], seed: 4.1 }
   ];
 
   var PARTS = [
@@ -288,7 +288,7 @@
     'vec3 desk=vec3(0.953,0.958,0.966);float n=ns(hp*0.03)*0.55+ns(hp*vec2(0.02,0.25))*0.3+ns(hp*0.8)*0.15;desk*=0.985+0.025*n;' +
     'desk*=1.0+0.04*clamp(1.0-length((hp-vec2(-300.0,260.0))/620.0),0.0,1.0);' +
     'vec2 mp=hp-uMat.xy;float d=sdb(mp,uMat.zw,mix(16.0,7.0,uBoard));' +
-    'desk*=1.0-0.10*exp(-max(d,0.0)/3.0)*step(0.0,d);' +
+    'float fd=clamp(uLeft+uBottom,0.0,1.0)*uBoard;desk*=1.0-0.10*(1.0-fd)*exp(-max(d,0.0)/3.0)*step(0.0,d);' +
     'vec3 mc=vec3(0.858,0.882,0.922)*(0.992+0.016*ns(hp*0.7));vec2 g=mp+uMat.zw;' +
     'vec2 g10=abs(fract(g/10.0+0.5)-0.5)*10.0;float l10=1.0-smoothstep(0.12,0.12+fw.x*1.3,min(g10.x,g10.y));' +
     'vec2 g50=abs(fract(g/50.0+0.5)-0.5)*50.0;float l50=1.0-smoothstep(0.4,0.4+fw.x*1.3,min(g50.x,g50.y));' +
@@ -299,7 +299,7 @@
     'if(uBoard>0.5){vec3 wb=vec3(0.984,0.987,0.992)+0.008*(ns(hp*0.05)-0.5);' +
     'float gb=exp(-pow((mp.x*0.55+mp.y*0.85-30.0)/70.0,2.0))*0.018;wb+=vec3(gb);' +
     'float fr=1.0-smoothstep(5.0,6.0,-d);float fy=clamp(0.5+mp.y/(2.0*uMat.w),0.0,1.0);vec3 alu=mix(vec3(0.70,0.72,0.76),vec3(0.87,0.88,0.905),fy);' +
-    'float lip=exp(-pow((-d-6.0)/0.9,2.0))*0.10;wb*=1.0-lip;mc=mix(wb,alu,fr);mc*=1.0-0.05*rim;}' +
+    'float lip=exp(-pow((-d-6.0)/0.9,2.0))*0.10;vec3 wb0=wb;wb*=1.0-lip;mc=mix(wb,alu,fr);mc*=1.0-0.05*rim;mc=mix(mc,mix(desk,wb0,smoothstep(0.0,90.0,-d)),fd);}' +
     'float am=clamp(0.5-d/(fw.x*1.2),0.0,1.0);vec3 c=mix(desk,mc,am);' +
     'vec2 s=texture(uS,uv).rg;float sh=clamp(s.r*0.50+s.g*0.56,0.0,0.92);c*=vec3(1.0)-sh*vec3(0.30,0.26,0.15);' +
     'c=mix(c,vec3(0.972,0.976,0.985),uLeft*(1.0-smoothstep(0.22,0.56,uv.x))*0.82);c=mix(c,vec3(0.972,0.976,0.985),uBottom*(1.0-smoothstep(0.30,0.62,uv.y))*0.85);' +
@@ -417,7 +417,7 @@
     var S = tall ? D.tall : D.wide, rad = Math.PI / 180;
     var cf = flatCenter(D), rc = rot2([cf[0] - D.pivot[0], cf[1] - D.pivot[1]], S.r * rad);
     var o0 = [S.c[0] - (rc[0] + D.pivot[0]), S.c[1] - (rc[1] + D.pivot[1])];
-    var e = M.ease(D.move[0], D.move[1], t), en = 1 - eo(D.enter.t, D.enter.t + 0.6, t);
+    var e = M.ease(D.move[0], D.move[1], t), en = 1 - eo(D.enter.t, D.enter.t + 0.5, t);
     var lift = Math.sin(Math.PI * e);
     var phi = M.lerp(S.r, 0, e) + D.enter.r * en;
     var ox = M.lerp(o0[0], 0, e) + D.enter.d[0] * en, oy = M.lerp(o0[1], 0, e) + D.enter.d[1] * en;
@@ -468,7 +468,7 @@
     var ppu1 = tall ? Math.min(W * 0.6, H * 0.34) / GLYPH_H : Math.min(H * 0.56, W * 0.4) / GLYPH_H;
     var ppu2 = L.s * 0.86 / GLYPH_H;
     var s0 = tall ? [W / 2, H * 0.40] : [W / 2, H * 0.5], s1 = tall ? [W / 2, H * 0.36] : [W / 2, H * 0.5], s2 = [L.x, L.y];
-    var e1 = M.ease(1.15, 3.25, t), e2 = M.ease(3.5, 4.45, t);
+    var e1 = M.ease(0.92, 2.6, t), e2 = M.ease(2.8, 3.5, t);
     var c = [M.lerp(sp.c[0], GLYPH_C[0], e1), M.lerp(sp.c[1], GLYPH_C[1], e1)];
     var ppu = M.lerp(M.lerp(ppu0, ppu1, e1), ppu2, e2);
     var scr = [M.lerp(M.lerp(s0[0], s1[0], e1), s2[0], e2), M.lerp(M.lerp(s0[1], s1[1], e1), s2[1], e2)];
@@ -476,10 +476,10 @@
   }
 
   M.run({
-    id: 'fold', theme: 'light', bg: '#F3F4F6', textAt: 4.6, revisitAt: 3.4, skipSpeed: 5,
+    id: 'fold', theme: 'light', bg: '#F3F4F6', textAt: 3.4, revisitAt: 2.72, skipSpeed: 5,
     accent: BLUE, accentInk: '#FFFFFF', accentHi: BLUE,
     fallbackBg: 'linear-gradient(160deg, #FFFFFF 0%, #EEF3FF 60%, #E7F8F1 100%)',
-    filmText: { eb: BLUE, tx: '#0B1530', hi: BLUE, sub: 'rgba(11,21,48,.66)', textAt: 4.7,
+    filmText: { eb: BLUE, tx: '#0B1530', hi: BLUE, sub: 'rgba(11,21,48,.66)', textAt: 3.5,
       sub2: '<span>영수증 · 카드 전표 · 납부서, 하나도 빠짐없이</span>' },
     init: function (api) {
       try {
@@ -518,18 +518,18 @@
       var F = framing(t, api);
       geometry(t, F.tall);
 
-      var rad = Math.PI / 180, st = M.ease(2.85, 3.9, t);
+      var rad = Math.PI / 180, st = M.ease(2.28, 3.12, t);
       var tau = M.lerp(40, 30, st) * rad + api.mouse.sy * 5 * rad * st;
-      var beta = M.lerp(-14, -7, M.ease(0.8, 3.9, t)) * rad + api.mouse.sx * 8 * rad * st;
+      var beta = M.lerp(-14, -7, M.ease(0.64, 3.12, t)) * rad + api.mouse.sx * 8 * rad * st;
       var Dd = 760, fov = 32 * rad, tgt = [F.c[0], F.c[1], 0];
       var eye = [tgt[0] + Dd * Math.sin(tau) * Math.sin(beta), tgt[1] - Dd * Math.sin(tau) * Math.cos(beta), Dd * Math.cos(tau)];
       var V = lookAt(eye, tgt, [-Math.sin(beta), Math.cos(beta), 0]);
       var Pm = persp(fov, W / H, Dd * 0.25, Dd * 4);
-      var base = H / (2 * Dd * Math.tan(fov / 2)), k = F.ppu / base * (1 + 0.045 * M.ease(3.6, 5.0, t));
+      var base = H / (2 * Dd * Math.tan(fov / 2)), k = F.ppu / base * (1 + 0.045 * M.ease(2.9, 5.0, t));
       var sx = F.scr[0] / W * 2 - 1, sy = 1 - F.scr[1] / H * 2;
       var Lm = [k, 0, 0, 0, 0, k, 0, 0, 0, 0, 1, 0, sx, sy, 0, 1];
       var VP = m4mul(Lm, m4mul(Pm, V));
-      var veilL = api.mode === 'side' ? M.ease(3.5, 4.45, t) : 0, veilB = api.mode === 'stack' ? M.ease(3.5, 4.45, t) : 0;
+      var veilL = api.mode === 'side' ? M.ease(2.8, 3.5, t) : 0, veilB = api.mode === 'stack' ? M.ease(2.8, 3.5, t) : 0;
 
       gl.bindBuffer(gl.ARRAY_BUFFER, BUF.tri); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(TRI), gl.DYNAMIC_DRAW);
       gl.bindBuffer(gl.ARRAY_BUFFER, BUF.ln); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(LN), gl.DYNAMIC_DRAW);
@@ -575,9 +575,9 @@
       gl.useProgram(P.paper.p); gl.bindVertexArray(VAO.tri);
       gl.uniformMatrix4fv(P.paper.u.uVP, false, VP); gl.uniform3f(P.paper.u.uEye, eye[0], eye[1], eye[2]);
       gl.uniform3f(P.paper.u.uL, LIGHT[0], LIGHT[1], LIGHT[2]); gl.uniform1i(P.paper.u.uTex, 0);
-      var sw = M.sstep(3.55, 4.4, t);
+      var sw = M.sstep(2.84, 3.46, t);
       gl.uniform1f(P.paper.u.uSheen, sw > 0 && sw < 1 ? 1 : 0); gl.uniform1f(P.paper.u.uSweep, M.lerp(-160, 220, sw));
-      gl.uniform1f(P.paper.u.uWash, M.lerp(-260, 260, M.ease(3.05, 3.85, t))); gl.uniform1f(P.paper.u.uWashAmt, WASH);
+      gl.uniform1f(P.paper.u.uWash, M.lerp(-260, 260, M.ease(2.44, 3.06, t))); gl.uniform1f(P.paper.u.uWashAmt, WASH);
       PAPERS.forEach(function (D, i) {
         gl.bindTexture(gl.TEXTURE_2D, D.tex); gl.uniform3f(P.paper.u.uBack, D.back[0], D.back[1], D.back[2]);
         gl.drawArrays(gl.TRIANGLES, RANGES[i][0], RANGES[i][1]);
@@ -585,7 +585,7 @@
       gl.disable(gl.POLYGON_OFFSET_FILL);
 
       gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.depthMask(false);
-      gl.useProgram(P.line.p); gl.bindVertexArray(VAO.ln); gl.uniformMatrix4fv(P.line.u.uVP, false, VP); gl.uniform4f(P.line.u.uC, 0.10, 0.14, 0.30, 0.13 * (1.0 - 0.85 * M.ease(3.05, 3.85, t)));
+      gl.useProgram(P.line.p); gl.bindVertexArray(VAO.ln); gl.uniformMatrix4fv(P.line.u.uVP, false, VP); gl.uniform4f(P.line.u.uC, 0.10, 0.14, 0.30, 0.13 * (1.0 - 0.85 * M.ease(2.44, 3.06, t)));
       gl.drawArrays(gl.LINES, 0, LN.length / 3);
       gl.depthMask(true); gl.disable(gl.BLEND); gl.disable(gl.DEPTH_TEST);
       gl.bindVertexArray(null);
