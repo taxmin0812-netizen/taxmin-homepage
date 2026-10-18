@@ -909,30 +909,6 @@ button.dlg-banner { width: 100%; border: 0; text-align: left; cursor: pointer; f
 .dc-tag-free { color: #fff; background: var(--blue); }
 .dc-main { border-color: var(--blue-100); box-shadow: 0 18px 40px -24px rgba(37, 84, 240, .45); }
 
-.promo-dlg { padding: 0; border: 0; width: min(392px, calc(100% - 40px)); max-height: calc(100dvh - 40px); overflow: auto; border-radius: 24px; background: #fff; color: var(--ink); box-shadow: 0 40px 100px -30px rgba(11, 21, 48, .5); }
-.promo-dlg::backdrop { background: rgba(11, 21, 48, .5); backdrop-filter: blur(3px); }
-.promo-dlg[open] { animation: pmIn .4s var(--ease); }
-@keyframes pmIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-.pm-card { position: relative; overflow: hidden; padding: 30px 28px 24px; background: linear-gradient(180deg, #EEF3FF 0%, #F6F8FC 46%, #FFFFFF 100%); }
-.pm-mark { position: absolute; right: -40px; top: 18px; width: 210px; height: 124px; transform: rotate(-8deg); color: rgba(14, 33, 57, .05); --chk: rgba(37, 84, 240, .1); pointer-events: none; }
-.pm-x { position: absolute; z-index: 1; top: 14px; right: 14px; width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--line); background: #fff; display: grid; place-items: center; color: var(--ink-2); }
-.pm-x svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
-.pm-x:hover { color: var(--ink); }
-.pm-card .label { position: relative; margin: 0; }
-.pm-h { position: relative; margin-top: 14px; font-size: clamp(34px, 9vw, 42px); font-weight: 800; letter-spacing: -0.05em; line-height: 1.12; color: var(--ink); }
-.pm-h em { font-style: normal; color: var(--blue); }
-.pm-sub { position: relative; margin-top: 12px; font-size: 15.5px; line-height: 1.65; color: var(--ink-2); }
-.pm-plans { position: relative; margin-top: 20px; border-top: 1px solid var(--line-2); }
-.pm-plans li { display: flex; justify-content: space-between; align-items: baseline; padding: 12px 2px; border-bottom: 1px solid var(--line); font-size: 15px; }
-.pm-plans span { color: var(--ink-2); }
-.pm-plans b { font-weight: 800; letter-spacing: -0.02em; }
-.pm-go { position: relative; margin-top: 20px; }
-.pm-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 18px; border-top: 1px solid var(--line); background: #fff; }
-.pm-day { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink-2); cursor: pointer; }
-.pm-day input { width: 18px; height: 18px; accent-color: var(--blue); }
-.pm-close { border: 0; background: none; padding: 8px 4px 8px 12px; font: inherit; font-size: 14px; font-weight: 700; color: var(--ink); }
-@media (prefers-reduced-motion: reduce) { .promo-dlg[open] { animation: none; } }
-
 .fmap-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
 .fmap { --R: 460px; position: relative; width: var(--R); height: var(--R); max-width: 100%; margin: 0 auto; }
 .fm-rings { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke-width: 1.5; }
@@ -1168,10 +1144,11 @@ button.dlg-banner { width: 100%; border: 0; text-align: left; cursor: pointer; f
 .steps .step-key .step-no { background: var(--blue); color: #fff; }
 .header-actions .btn-apply { color: #fff; }
 
-.pm-perks { position: relative; margin-top: 20px; display: grid; gap: 10px; }
-.pm-perks li { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; letter-spacing: -0.03em; }
-.pm-perks svg { width: 24px; height: 24px; padding: 4px; border-radius: 50%; background: var(--blue); fill: none; stroke: #fff; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; flex: none; }
-
 @media (max-width: 640px) { .apply-dlg, .apply-dlg.is-form { width: 100%; max-width: 100%; margin: auto 0 0; } }
-.apply-dlg:focus, .promo-dlg:focus { outline: none; }
+.apply-dlg:focus { outline: none; }
 .dlg-back:not(.dlg-recalc) { border: 0; background: none; }
+
+.pp-vat { font-size: 12.5px; color: var(--muted); }
+.plan-main .pp-vat { color: rgba(255, 255, 255, .7); }
+.more-vat { display: block; margin-top: -4px; font-size: 12.5px; color: var(--muted); }
+.cs-plan small { font-size: 12px; color: var(--muted); }

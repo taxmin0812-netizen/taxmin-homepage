@@ -74,7 +74,7 @@
     var form = root.querySelector('.calc-form'), out = root.querySelector('.calc-result');
     var $ = function (s) { return root.querySelector(s); };
     var st = { type: 'personal', period: 'year', staff: 'no' };
-    var EMPTY = '<div class="cr-empty"><span class="cr-free">첫 달 기장료 0원</span><p>내용을 고르고 <b>계산하기</b>를 누르면<br>사장님 매출에 맞는 요금제를 추천해 드려요.</p></div>';
+    var EMPTY = '<div class="cr-empty"><p>내용을 고르고 <b>계산하기</b>를 누르면<br>사장님 매출에 맞는 요금제를 추천해 드려요.</p></div>';
     out.innerHTML = EMPTY;
 
     function num(el) { var v = parseInt(String(el.value).replace(/[^0-9]/g, ''), 10); return isNaN(v) ? 0 : v; }
@@ -133,6 +133,7 @@
       if (b && b.consult) sub.push('부터 · 상담 후 확정');
       else if (b) sub.push('예상');
       if (add) sub.push('직원 ' + emp + '명 ' + won(add) + ' 포함');
+      sub.push('부가세 별도');
       var data = {
         type: corp ? '법인사업자' : '개인사업자', industry: I[1],
         sales: isNew ? '올해 신규' + (m ? ' (' + eok(m) + ')' : '') : '연 ' + eok(m),
@@ -140,11 +141,10 @@
       };
       var rows = [['사업자', data.type], ['업종', data.industry], ['매출', data.sales], ['인건비 신고', data.staff]];
       out.innerHTML = '<div class="cr-card">' +
-        '<div class="cr-top"><p class="cr-k">사장님 매출에 맞는 추천 요금제</p><span class="cr-free">첫 달 0원</span></div>' +
+        '<div class="cr-top"><p class="cr-k">사장님 매출에 맞는 추천 요금제</p></div>' +
         '<h3>' + plan + '</h3>' +
         '<p class="cr-price"><b>' + price.replace(/부터$/, '') + '</b><span>' + sub.join(' · ') + '</span></p>' +
         '<p class="cr-reco">' + reco + '</p>' +
-        '<p class="cr-hook">새로 맡기시면 <b>첫 달 기장료는 0원</b>입니다.</p>' +
         '<dl class="cr-sum">' + rows.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd></div>'; }).join('') + '</dl>' +
         '<button class="btn btn-accent btn-block btn-lg cr-go" type="button">' + (opts.applyText || '이 내용으로 상담 신청하기') + ARROW + '</button>' +
         '<p class="cr-fine">정확한 금액은 담당 세무사가 자료를 보고 알려 드립니다.' + (corp ? '' : ' 종합소득세 신고(조정료)는 별도로 안내해 드려요.') + '</p>' +
