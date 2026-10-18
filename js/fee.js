@@ -126,13 +126,12 @@
       }
       var price = liteOk ? '월 ' + won(START.lite) : b.consult ? '월 ' + won(b.lo) + '부터' : '월 ' + man(b.lo) + '~' + won(b.hi);
       var reco = liteOk
-        ? '사장님께는 <b>' + plan + '</b>를 추천해요. ' + price + '(부가세 별도)으로 시작하실 수 있어요.' + (emp ? ' 인건비(원천세) 신고도 포함이에요.' : '')
-        : '사장님께는 <b>' + plan + '</b>을 추천해요. 예상 금액은 <b>' + price + '</b>입니다(부가세 별도).' + (b.consult ? ' 정확한 금액은 상담 때 정해 드려요.' : '');
+        ? '사장님께는 <b>' + plan + '</b>를 추천해요. ' + price + '으로 시작하실 수 있어요.' + (emp ? ' 인건비(원천세) 신고도 포함이에요.' : '')
+        : '사장님께는 <b>' + plan + '</b>을 추천해요. 예상 금액은 <b>' + price + '</b>입니다.' + (b.consult ? ' 정확한 금액은 상담 때 정해 드려요.' : '');
       var sub = [];
       if (b && b.consult) sub.push('부터 · 상담 후 확정');
       else if (b) sub.push('예상');
       if (add) sub.push('직원 ' + emp + '명 ' + won(add) + ' 포함');
-      sub.push('부가세 별도');
       var data = {
         type: corp ? '법인 사업자' : '개인 사업자', industry: I[1],
         sales: isNew ? '올해 신규' + (m ? ' (' + eok(m) + ')' : '') : '연 ' + eok(m),

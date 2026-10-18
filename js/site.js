@@ -128,6 +128,74 @@
   });
 
   (function () {
+    var mg = $('#mg');
+    if (!mg) return;
+    var steps = $$('.mg-steps li', mg), works = $$('.mw', mg), list = $('.kp-list', mg), link = $('.mg-link', mg);
+    var D = 3600, cur = -1, timer = null, live = false, ts = [];
+    var MSG = [
+      [{ t: 't', h: '대표님, <b>7월 매출 보고서</b> 보내 드려요.', c: ['7월 매출', '5,376만 원 ↗'] }],
+      [{ t: 't', h: '이번 달 <b>원천세 신고</b> 마쳤어요.', c: ['직원 3명', '신고 완료 ✓'] }],
+      [{ t: 't', h: '<b>상반기 가결산</b>이에요. 예상 세액을 미리 알려 드려요.', c: ['예상 세액', '5,383만 원'] }],
+      [{ t: 't', h: '두 세무사가 <b>한 번 더 확인</b>했어요. 이제 신고할게요.' }],
+      [{ t: 'u', h: '영수증 사진 보낼게요!', p: 1 }, { t: 't', h: '받았어요. 장부에 바로 반영할게요.' }]
+    ];
+    function later(f, ms) { ts.push(setTimeout(f, ms)); }
+    function clearT() { ts.forEach(clearTimeout); ts = []; clearTimeout(timer); }
+    function now() { var d = new Date(); return (d.getHours() < 12 ? '오전 ' : '오후 ') + ((d.getHours() + 11) % 12 + 1) + ':' + ('0' + d.getMinutes()).slice(-2); }
+    function bubble(m) {
+      var el = document.createElement('div');
+      el.className = 'kp-msg kp-' + m.t;
+      el.innerHTML = (m.t === 't' ? '<span class="kp-av"><svg><use href="#tm-mark"/></svg></span>' : '') +
+        '<div class="kp-b">' + (m.p ? '<span class="kp-ph"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="9" cy="10" r="1.8"/><path d="M4 17l5-4.5 4 3.5 3-2.5 4 3.5"/></svg>사진</span>' : '') + m.h +
+        (m.c ? '<span class="kp-card"><span>' + m.c[0] + '</span><b>' + m.c[1] + '</b></span>' : '') + '</div><span class="kp-tm">' + now() + '</span>';
+      list.appendChild(el);
+      while (list.children.length > 5) list.removeChild(list.firstChild);
+      requestAnimationFrame(function () { el.classList.add('in'); });
+    }
+    function count(w) {
+      $$('[data-count]', w).forEach(function (b) {
+        var to = +b.getAttribute('data-count'), t0 = null;
+        if (reduce) return;
+        function f(t) { if (!t0) t0 = t; var k = Math.min(1, (t - t0) / 900), v = Math.round(to * (1 - Math.pow(1 - k, 3))); b.textContent = v.toLocaleString('ko-KR'); if (k < 1) requestAnimationFrame(f); }
+        requestAnimationFrame(f);
+      });
+    }
+    function pulse(dir) { link.classList.remove('fwd', 'rev'); void link.offsetWidth; link.classList.add(dir); }
+    function go(i) {
+      clearT(); cur = i;
+      steps.forEach(function (li, k) { li.classList.toggle('on', k === i); });
+      works.forEach(function (w, k) { w.classList.toggle('on', k === i); });
+      if (i === 0) list.innerHTML = '';
+      count(works[i]);
+      if (i < 4) { later(function () { pulse('fwd'); }, 1300); later(function () { MSG[i].forEach(bubble); }, 1900); }
+      else { later(function () { bubble(MSG[4][0]); }, 300); later(function () { pulse('rev'); }, 900); later(function () { bubble(MSG[4][1]); }, 2300); }
+      if (live && !reduce) timer = setTimeout(function () { go((cur + 1) % 5); }, D);
+    }
+    steps.forEach(function (li, k) { $('button', li).addEventListener('click', function () { go(k); }); });
+    if (reduce) { MSG.forEach(function (g) { g.forEach(bubble); }); return; }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (e.isIntersecting && !live) { live = true; go(cur < 0 ? 0 : cur); }
+          else if (!e.isIntersecting && live) { live = false; clearT(); }
+        });
+      }, { threshold: 0.35 }).observe(mg);
+    } else { live = true; go(0); }
+  })();
+
+  (function () {
+    var nav = $$('.faq-nav li'), gs = $$('.faq-group');
+    if (!nav.length || !gs.length) return;
+    function spy() {
+      var on = 0;
+      gs.forEach(function (g, k) { if (g.getBoundingClientRect().top < window.innerHeight * 0.45) on = k; });
+      nav.forEach(function (li, k) { li.classList.toggle('on', k === on); });
+    }
+    window.addEventListener('scroll', function () { requestAnimationFrame(spy); }, { passive: true });
+    spy();
+  })();
+
+  (function () {
     var map = $('.fmap');
     if (!map) return;
     var rows = $$('.fl-list li'), nodes = $$('.fm-node', map), cur = 0, hold = false;
@@ -414,26 +482,17 @@
     function set(st, k, v) { try { window[st].setItem(k, v); } catch (e) {} }
     if (/[?&]nopromo\b/.test(location.search) || location.hash === '#apply' || !window.HTMLDialogElement) return;
     if (+get('localStorage', HIDE) > Date.now() || get('sessionStorage', SEEN) === '1') return;
-    var ART = '<svg class="pm-art" viewBox="0 0 180 150" aria-hidden="true">' +
-      '<ellipse cx="90" cy="138" rx="52" ry="7" fill="rgba(8,20,80,.28)"/>' +
-      '<g class="pm-spark" fill="#fff"><path d="M28 34l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/><path d="M152 26l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" opacity=".8"/><path d="M160 88l2 4.5 4.5 2-4.5 2-2 4.5-2-4.5-4.5-2 4.5-2z" opacity=".6"/></g>' +
-      '<rect x="50" y="12" width="80" height="118" rx="18" fill="#fff"/>' +
-      '<rect x="61" y="24" width="58" height="30" rx="8" fill="#E8EEFF"/>' +
-      '<text x="111" y="46" text-anchor="end" font-size="19" font-weight="800" fill="#2554F0" font-family="Pretendard, sans-serif">0원</text>' +
-      '<g fill="#C9D6FA"><circle cx="72" cy="70" r="6"/><circle cx="90" cy="70" r="6"/><circle cx="108" cy="70" r="6"/><circle cx="72" cy="88" r="6"/><circle cx="90" cy="88" r="6"/><circle cx="108" cy="88" r="6"/><circle cx="72" cy="106" r="6"/><circle cx="90" cy="106" r="6"/></g>' +
-      '<rect x="102" y="82" width="12" height="30" rx="6" fill="#2554F0"/>' +
-      '<circle cx="134" cy="112" r="22" fill="#FFE14D"/><path d="M124 112l7 7 13-14" fill="none" stroke="#1B3BC4" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>' +
-      '</svg>';
     var dlg = document.createElement('dialog');
     dlg.className = 'promo-dlg'; dlg.setAttribute('aria-labelledby', 'promo-title');
+
     dlg.innerHTML = '<div class="pm-card">' +
+      '<svg class="pm-mark" aria-hidden="true"><use href="#tm-mark"/></svg>' +
       '<button class="pm-x" type="button" aria-label="닫기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>' +
-      ART +
-      '<p class="pm-k">택스민 신규 혜택</p>' +
-      '<h2 class="pm-h" id="promo-title"><span class="pm-big">첫 달 기장료 <em>0원</em></span><span class="pm-line">기장료 계산해 보고, 첫 달 무료 혜택 받자!</span></h2>' +
-      '<p class="pm-sub">업종과 작년 매출만 넣으면 사장님께 맞는 요금제와 예상 기장료를 바로 알려 드려요.</p>' +
-      '<button class="pm-go" type="button">기장료 계산하기<svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>' +
-      '<p class="pm-fine">새로 맡기시는 사업장 대상 · 기장료는 부가세 별도</p>' +
+      '<p class="label"><i></i>신규 혜택 <em>EVENT</em></p>' +
+      '<h2 class="pm-h" id="promo-title">첫 달 기장료<br><em>0원</em><span class="dot-end">.</span></h2>' +
+      '<p class="pm-sub">새로 맡기시면 첫 달 기장료는 받지 않아요.<br>내 기장료부터 계산해 보세요.</p>' +
+      '<ul class="pm-plans"><li><span>택스민 라이트</span><b data-p="lite">월 5만원</b></li><li><span>스탠다드 기장</span><b data-p="standard">월 7만원~</b></li><li><span>법인 기장</span><b data-p="corp">월 12만원~</b></li></ul>' +
+      '<button class="btn btn-accent btn-block btn-lg pm-go" type="button">내 기장료 계산하기' + '<svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>' +
       '</div>' +
       '<div class="pm-foot"><label class="pm-day"><input type="checkbox"><span>1일 동안 보지 않기</span></label><button class="pm-close" type="button">닫기</button></div>';
     document.body.appendChild(dlg);
@@ -452,6 +511,8 @@
       if (done) return; done = true;
       setTimeout(function () {
         if (document.querySelector('dialog[open]')) return;
+        var S = window.TaxminFee && window.TaxminFee.START;
+        if (S) $$('[data-p]', dlg).forEach(function (el) { var k = el.getAttribute('data-p'); if (S[k]) el.textContent = '월 ' + (S[k] / 10000) + '만원' + (k === 'lite' ? '' : '~'); });
         try { dlg.showModal(); } catch (e) {}
       }, 600);
     }
