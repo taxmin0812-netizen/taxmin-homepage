@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>회사 소개 | 택스민</title>
+  <title>회사 소개 | 택스민 · 세무회계 민</title>
   <meta name="description" content="택스민이 왜 시작됐고, 이민기·변진웅 두 세무사가 어떻게 장부를 보는지 소개합니다.">
   <meta name="theme-color" content="#F6F8FC">
   <link rel="canonical" href="https://taxmin.kr/about.html">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="택스민">
+  <meta property="og:site_name" content="택스민 · 세무회계 민">
   <meta property="og:locale" content="ko_KR">
   <meta property="og:url" content="https://taxmin.kr/about.html">
   <meta property="og:title" content="회사 소개 | 택스민">
@@ -21,8 +21,8 @@
   <link rel="apple-touch-icon" href="assets/logo/apple-touch-icon.png">
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-  <link rel="stylesheet" href="css/style.css">
-  <script src="js/boot.js"></script>
+  <link rel="stylesheet" href="css/style.css?v=02a34039">
+  <script src="js/boot.js?v=de8ec58e"></script>
 </head>
 <body>
 
@@ -47,9 +47,9 @@
     <a class="brand" href="index.html" aria-label="택스민 홈"><svg class="brand-ic" aria-hidden="true"><use href="#tm-symbol"/></svg><span class="brand-wm" aria-hidden="true">택스<b class="wm-m">민</b></span></a>
     <nav class="nav" aria-label="주 메뉴"><a href="about.html" class="on" aria-current="page">회사 소개</a><a href="services.html">업무 분야</a><a href="how.html">서비스 소개</a><a href="pricing.html">기장료</a><a href="faq.html">자주 묻는 질문</a><a href="contact.html">오시는 길</a></nav>
     <div class="header-actions">
+      <a class="btn btn-accent btn-sm btn-apply" href="#apply" data-apply aria-haspopup="dialog">상담 신청하기</a>
+      <a class="btn btn-kakao btn-sm" href="https://pf.kakao.com/_Mxojqs/chat" target="_blank" rel="noopener" aria-label="카카오톡 상담"><svg class="ico" aria-hidden="true"><use href="#i-kakao"/></svg><span>카카오톡 상담</span></a>
       <a class="btn-tel" href="tel:0507-1428-6446" aria-label="전화 상담" title="전화 상담"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg></a>
-      <a class="btn btn-ghost btn-sm btn-apply" href="#apply" data-apply aria-haspopup="dialog">상담 신청</a>
-      <a class="btn btn-kakao btn-sm" href="https://pf.kakao.com/_Mxojqs/chat" target="_blank" rel="noopener" aria-label="카카오톡 상담"><svg class="ico" aria-hidden="true"><use href="#i-kakao"/></svg><span>카톡 상담</span></a>
       <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="메뉴 열기"><span></span><span></span></button>
     </div>
   </div>
@@ -75,19 +75,19 @@
       <div class="about-head">
         <p class="label"><i></i>택스민 이야기 <em>OUR STORY</em></p>
         <h2 class="display">두 세무사가<br>고민 끝에 만든<br>세무 관리 방식<span class="dot-end">.</span></h2>
-        <ol class="chapter-nav" aria-hidden="true">
-          <li data-ch="1"><span>01</span>같은 고민</li>
-          <li data-ch="2"><span>02</span>방식을 바꾸다</li>
-        </ol>
+        <nav aria-label="이야기 목차"><ol class="chapter-nav faq-nav">
+          <li data-ch="1"><a href="#ch-1"><span>01</span>같은 고민</a></li>
+          <li data-ch="2"><a href="#ch-2"><span>02</span>방식을 바꾸다</a></li>
+        </ol></nav>
       </div>
       <div class="chapters">
-        <article class="chapter reveal" data-ch="1">
+        <article class="chapter reveal" data-ch="1" id="ch-1">
           <p class="ch-no">01 — 같은 고민</p>
           <h3>신고만 맡기자니 불안하고,<br>매달 맡기자니 부담되고.</h3>
           <p>사장님들과 이야기하다 보면 같은 고민을 자주 듣습니다. 신고만 맡기자니 너무 대충 하는 것 같고, 매달 관리를 받자니 기장료가 부담된다는 이야기입니다.</p>
           <p>그 사이에서 많은 사장님이 세금을 미뤄 두거나, 늦은 밤 혼자 영수증을 들여다보고 계셨습니다.</p>
         </article>
-        <article class="chapter reveal" data-ch="2">
+        <article class="chapter reveal" data-ch="2" id="ch-2">
           <p class="ch-no">02 — 방식을 바꾸다</p>
           <h3>‘얼마나 싸게’가 아니라<br>‘어떻게 하나도 놓치지 않을까’.</h3>
           <p>그래서 이민기·변진웅 두 세무사는 질문을 바꿨습니다. 그렇게 만든 것이 택스민의 관리 방식입니다.</p>
@@ -143,12 +143,12 @@
     <div class="wrap">
       <div class="contact-head reveal">
         <svg class="contact-mark" aria-hidden="true"><use href="#tm-mark"/></svg>
-        <h2 class="display">세금 이야기,<br>카카오톡 한 줄이면 시작됩니다<span class="dot-end">.</span></h2>
+        <h2 class="display">세금 이야기,<br>상담 신청 한 번이면 시작됩니다<span class="dot-end">.</span></h2>
         <p class="contact-sub"><b>새로 맡기시면 첫 달 기장료 0원</b> · 상담 시간 평일 10:00 ~ 17:30</p>
         <div class="contact-cta">
-          <a class="btn btn-kakao btn-lg" href="https://pf.kakao.com/_Mxojqs/chat" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-kakao"/></svg>카카오톡으로 상담하기</a>
+          <a class="btn btn-accent btn-lg" href="#apply" data-apply aria-haspopup="dialog">상담 신청하기<svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="btn btn-kakao btn-lg" href="https://pf.kakao.com/_Mxojqs/chat" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-kakao"/></svg>카카오톡 상담</a>
           <a class="btn btn-ghost btn-lg" href="tel:0507-1428-6446"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>전화 상담</a>
-          <a class="btn btn-ghost btn-lg" href="#apply" data-apply aria-haspopup="dialog">상담 신청<svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         </div>
       </div>
     </div>
@@ -168,7 +168,7 @@
       <div class="footer-info">
         <p>택스민은 세무회계 민의 브랜드입니다.</p>
         <p>상호 세무회계 민 · 대표 이민기 · 사업자등록번호 546-54-00533</p>
-        <p>서울특별시 강서구 공항대로 194, 717~718호 · Tel 0507-1428-6446 · Fax 0303-3443-7700 · tax-min@naver.com</p>
+        <p>서울특별시 강서구 공항대로 194, 717~718호 · Tel 0507-1428-6446 · Fax 0303-3443-7700 · tax-min@naver.com · 상담 평일 10:00 ~ 17:30</p>
       </div>
       <p class="copy">© 2026 택스민 · 세무회계 민</p>
     </div>
@@ -180,8 +180,8 @@
   <a class="fc-kakao" href="https://pf.kakao.com/_Mxojqs/chat" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-kakao"/></svg>카카오톡 상담</a>
 </div>
 
-<script src="js/logos.js"></script>
-<script src="js/site.js"></script>
-<script src="js/fee.js"></script>
+<script src="js/logos.js?v=86c5545e"></script>
+<script src="js/site.js?v=aae38d9d"></script>
+<script src="js/fee.js?v=8fa07443"></script>
 </body>
 </html>

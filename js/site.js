@@ -10,9 +10,15 @@
   var words = [];
   $$('[data-words]').forEach(function (el) {
     var keys = ['하나도', '놓치지', '않겠다는', '약속입니다.'];
-    el.innerHTML = el.textContent.trim().split(/\s+/).map(function (w) {
-      return '<span class="w' + (keys.indexOf(w) >= 0 ? ' key' : '') + '">' + w + '</span>';
-    }).join(' ');
+    var ws = el.textContent.trim().split(/\s+/);
+    el.textContent = '';
+    ws.forEach(function (w, k) {
+      var sp = document.createElement('span');
+      sp.className = 'w' + (keys.indexOf(w) >= 0 ? ' key' : '');
+      sp.textContent = w;
+      el.appendChild(sp);
+      if (k < ws.length - 1) el.appendChild(document.createTextNode(' '));
+    });
     words = words.concat($$('.w', el));
   });
   var statement = $('.statement-text');
@@ -133,9 +139,9 @@
     var steps = $$('.mg-steps li', mg), works = $$('.mw', mg), list = $('.kp-list', mg), link = $('.mg-link', mg);
     var D = 3600, cur = -1, timer = null, live = false, ts = [];
     var MSG = [
-      [{ t: 't', h: '대표님, <b>7월 매출 보고서</b> 보내 드려요.', c: ['7월 매출', '5,376만 원 ↗'] }],
+      [{ t: 't', h: '대표님, <b>7월 매출 보고서</b> 보내 드려요.', c: ['7월 매출', '5,376만원 ↗'] }],
       [{ t: 't', h: '이번 달 <b>원천세 신고</b> 마쳤어요.', c: ['직원 3명', '신고 완료 ✓'] }],
-      [{ t: 't', h: '<b>상반기 가결산</b>이에요. 예상 세액을 미리 알려 드려요.', c: ['예상 세액', '5,383만 원'] }],
+      [{ t: 't', h: '<b>상반기 가결산</b>이에요. 예상 세액을 미리 알려 드려요.', c: ['예상 세액', '5,383만원'] }],
       [{ t: 't', h: '두 세무사가 <b>한 번 더 확인</b>했어요. 이제 신고할게요.' }],
       [{ t: 'u', h: '영수증 사진 보낼게요!', p: 1 }, { t: 't', h: '받았어요. 장부에 바로 반영할게요.' }]
     ];
@@ -203,10 +209,6 @@
       rows.forEach(function (r) { r.classList.toggle('on', r.getAttribute('data-k') === k); });
       nodes.forEach(function (n) { n.classList.toggle('on', n.getAttribute('data-k') === k); });
     }
-    rows.forEach(function (r) {
-      r.addEventListener('mouseenter', function () { hold = true; cur = +r.getAttribute('data-k'); on(String(cur)); });
-      r.addEventListener('mouseleave', function () { hold = false; });
-    });
     on('1'); cur = 1;
     if (!reduce) setInterval(function () { if (hold || document.hidden) return; cur = cur % 8 + 1; on(String(cur)); }, 2400);
   })();
@@ -272,11 +274,11 @@
       '<div class="dlg-cards">' +
 
       '<article class="dc dc-main"><span class="dc-tag dc-tag-free">첫 달 기장료 0원</span><h3>세무기장 상담</h3><p class="dc-desc">장부 정리와 세금 신고를 맡기고, 매달 보고까지 받는 세무기장을 상담합니다. 기장료를 계산한 뒤 신청서를 남겨 주시면 담당 세무사가 연락드립니다.</p>' +
-      '<ul class="dc-checks"><li>' + CHECK + '사장님 매출에 맞는 요금제와 예상 기장료를 바로 알려 드려요.</li><li>' + CHECK + '다른 세무사무소에서 옮겨 오셔도 이전 장부까지 도와 드립니다.</li><li>' + CHECK + '계약 전이라도 편하게 물어보셔도 됩니다.</li></ul>' +
+      '<ul class="dc-checks"><li>' + CHECK + '사장님 매출에 맞는 요금제와 예상 기장료를 바로 알려 드립니다.</li><li>' + CHECK + '다른 세무사무소에서 옮겨 오셔도 이전 장부까지 도와 드립니다.</li><li>' + CHECK + '계약 전이라도 편하게 물어보셔도 됩니다.</li></ul>' +
       '<button class="btn btn-accent btn-block" type="button" data-go="calc">기장료 계산하고 신청하기' + ARROW + '</button></article>' +
       '<article class="dc"><span class="dc-tag dc-tag-k">카카오톡 채널</span><h3>세금 질문 · 신고 상담</h3><p class="dc-desc">부가가치세·종합소득세 신고, 양도·증여·상속, 창업처럼 궁금한 세금 이야기는 카카오톡 채널로 편하게 물어보세요.</p>' +
       '<ul class="dc-checks"><li>' + CHECK + '궁금할 때 카카오톡으로 바로 물어보세요.</li><li>' + CHECK + '영수증·자료 사진도 카카오톡으로 바로 보낼 수 있습니다.</li></ul>' +
-      '<a class="btn btn-kakao btn-block" href="' + KAKAO + '" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-kakao"/></svg>카카오톡으로 상담하기</a></article>' +
+      '<a class="btn btn-kakao btn-block" href="' + KAKAO + '" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-kakao"/></svg>카카오톡 상담</a></article>' +
       '</div>' +
       '<p class="dlg-alt">전화 상담 <a href="tel:0507-1428-6446">0507-1428-6446</a> · 평일 10:00 ~ 17:30</p>' +
       '</div>' +
@@ -298,7 +300,7 @@
       '<div class="fields">' +
       '<label class="fld"><span>이름 또는 상호 <b aria-hidden="true">*</b></span><input name="이름" id="f-name" required maxlength="40" autocomplete="name" placeholder="홍길동 / 길동상회"></label>' +
       '<label class="fld"><span>연락처 <b aria-hidden="true">*</b></span><input name="연락처" id="f-tel" type="tel" required maxlength="20" autocomplete="tel" inputmode="tel" pattern="[0-9 +\\-\\(\\)]{9,20}" placeholder="010-0000-0000"></label>' +
-      '<label class="fld fld-wide"><span>남기실 말씀 <i>(선택)</i></span><textarea name="남기실 말씀" id="f-msg" rows="3" maxlength="1000" placeholder="예) 지금 다른 세무사무소에 맡기고 있는데 옮기고 싶어요"></textarea></label>' +
+      '<label class="fld fld-wide"><span>남기실 말씀 <i>(선택)</i></span><textarea name="남기실 말씀" id="f-msg" rows="3" maxlength="1000" placeholder="예) 지금 다른 세무사무소에 맡기고 있는데 옮기고 싶어요"></textarea><span class="fld-note">주민등록번호·계좌번호 같은 정보는 적지 말아 주세요.</span></label>' +
       '</div>' +
       '<label class="agree"><input type="checkbox" name="개인정보 수집·이용 동의" value="동의함" id="f-agree" required><span>개인정보 수집·이용에 동의합니다 <b>(필수)</b></span></label>' +
       '<p class="agree-note">받는 정보: 이름(상호)·연락처·계산하고 적은 내용 · 쓰는 곳: 상담 연락 · 보관: 상담이 끝나고 1년 뒤 지움 · <a href="privacy.html#apply-info">자세히</a><br>동의하지 않으셔도 카카오톡이나 전화로 상담하실 수 있습니다.</p>' +
@@ -366,13 +368,14 @@
         scrollTo: function (el) { try { el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) {} }
       });
     }
+    function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
     function setCalc(d) {
       calcData = d;
       var map = { 'f-type': d.type, 'f-ind': d.industry, 'f-sales': d.sales, 'f-book': d.book, 'f-plan': d.plan + ' ' + (d.est ? '예상 ' : '') + d.price + ' · 첫 달 0원', 'f-staff': d.staff };
       Object.keys(map).forEach(function (id) { $('#' + id, dlg).value = map[id]; });
       $('#calc-sum', dlg).innerHTML = '<div class="cs-top"><span>계산한 내용</span><button type="button" data-back2="calc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4.2L19.4 8.8a2.1 2.1 0 0 0 0-3L18.2 4.6a2.1 2.1 0 0 0-3 0L4 15.8z"/><path d="M13.6 6.2l4.2 4.2"/></svg>고치기</button></div>' +
-        '<p class="cs-plan">추천 요금제 <b>' + d.plan + '</b> · ' + (d.est ? '예상 ' : '') + d.price + ' <em>첫 달 0원</em></p>' +
-        '<p class="cs-rows">' + [d.type, d.industry, d.sales, '인건비 신고 ' + d.staff].join(' · ') + '</p>';
+        '<p class="cs-plan">추천 요금제 <b>' + esc(d.plan) + '</b> · ' + (d.est ? '예상 ' : '') + esc(d.price) + ' <em>첫 달 0원</em></p>' +
+        '<p class="cs-rows">' + [d.type, d.industry, d.sales, '인건비 신고 ' + d.staff].map(esc).join(' · ') + '</p>';
       $('[data-back2]', dlg).addEventListener('click', function () { step('calc'); });
     }
     function text() {
@@ -408,8 +411,8 @@
       $$('.dlg-step', dlg).forEach(function (el) { el.hidden = el.getAttribute('data-step') !== name; });
       dlg.classList.toggle('is-form', name === 'form');
       dlg.scrollTop = 0;
-      var f = name === 'choose' ? $('.dlg-x', dlg) : $('.dlg-step[data-step="' + name + '"] .dlg-back', dlg);
-      try { f.focus({ preventScroll: true }); } catch (e) {}
+
+      dlg.setAttribute('tabindex', '-1'); try { dlg.focus({ preventScroll: true }); } catch (e) {}
     }
     function setChip(key, label) {
       if (!label) return;
@@ -428,6 +431,7 @@
       if (opts.prefill && opts.prefill.issue) setChip('issue', opts.prefill.issue);
       document.documentElement.classList.add('dlg-open');
       if (typeof dlg.showModal === 'function') { if (!dlg.open) dlg.showModal(); } else dlg.setAttribute('open', '');
+      dlg.setAttribute('tabindex', '-1'); try { dlg.focus({ preventScroll: true }); } catch (e) {}
       dlg.scrollTop = 0;
     }
     function close() {
@@ -447,8 +451,10 @@
       data._subject = '[택스민 홈페이지] 상담 신청 — ' + ($('#f-name', form).value.trim() || '이름 없음');
       data['보낸 곳'] = 'taxmin.kr 상담 신청서';
       send.disabled = true; send.textContent = '보내는 중…'; msg.hidden = true;
+      var ac = window.AbortController ? new AbortController() : null, tmo = ac ? setTimeout(function () { ac.abort(); }, 15000) : 0;
       fetch(form.getAttribute('action').replace('formsubmit.co/', 'formsubmit.co/ajax/'), {
         method: 'POST',
+        signal: ac ? ac.signal : undefined,
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(data)
       }).then(function (r) {
@@ -463,7 +469,7 @@
         }
       }, function () {
         say(false, '인터넷 연결 때문에 보내지 못했어요. 잠시 뒤 다시 보내거나 카카오톡·전화로 연락 주세요.');
-      }).then(function () { send.disabled = false; send.innerHTML = SEND_TEXT; });
+      }).then(function () { clearTimeout(tmo); send.disabled = false; send.innerHTML = SEND_TEXT; });
     }
     document.addEventListener('click', function (e) {
       var a = e.target.closest && e.target.closest('a[href="#apply"], [data-apply]');
@@ -490,8 +496,9 @@
       '<button class="pm-x" type="button" aria-label="닫기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>' +
       '<p class="label"><i></i>신규 혜택 <em>EVENT</em></p>' +
       '<h2 class="pm-h" id="promo-title">첫 달 기장료<br><em>0원</em><span class="dot-end">.</span></h2>' +
-      '<p class="pm-sub">새로 맡기시면 첫 달 기장료는 받지 않아요.<br>내 기장료부터 계산해 보세요.</p>' +
-      '<ul class="pm-plans"><li><span>택스민 라이트</span><b data-p="lite">월 5만원</b></li><li><span>스탠다드 기장</span><b data-p="standard">월 7만원~</b></li><li><span>법인 기장</span><b data-p="corp">월 12만원~</b></li></ul>' +
+      '<p class="pm-sub">새로 맡기시면 첫 달은 받지 않습니다.<br>내 기장료부터 계산해 보세요.</p>' +
+
+      '<ul class="pm-perks"><li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3.2 3.2L15 6.8"/></svg>원천세 신고까지</li><li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3.2 3.2L15 6.8"/></svg>매달 매출 보고</li><li><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10.5l3.2 3.2L15 6.8"/></svg>두 세무사 교차 검수</li></ul>' +
       '<button class="btn btn-accent btn-block btn-lg pm-go" type="button">내 기장료 계산하기' + '<svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>' +
       '</div>' +
       '<div class="pm-foot"><label class="pm-day"><input type="checkbox"><span>1일 동안 보지 않기</span></label><button class="pm-close" type="button">닫기</button></div>';
@@ -511,9 +518,7 @@
       if (done) return; done = true;
       setTimeout(function () {
         if (document.querySelector('dialog[open]')) return;
-        var S = window.TaxminFee && window.TaxminFee.START;
-        if (S) $$('[data-p]', dlg).forEach(function (el) { var k = el.getAttribute('data-p'); if (S[k]) el.textContent = '월 ' + (S[k] / 10000) + '만원' + (k === 'lite' ? '' : '~'); });
-        try { dlg.showModal(); } catch (e) {}
+        try { dlg.showModal(); dlg.setAttribute('tabindex', '-1'); dlg.focus({ preventScroll: true }); } catch (e) {}
       }, 600);
     }
     if ($('#hero') && !html.classList.contains('intro-done')) {

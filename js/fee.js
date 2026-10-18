@@ -38,14 +38,15 @@
     return { lo: rows[rows.length - 1][2], hi: 0, consult: true };
   }
   function staffAdd(n) { return n > 10 ? 30000 : n > 5 ? 10000 : 0; }
+  function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function man(n) { return String(Math.round(n / 1000) / 10); }
   function won(n) { return (Math.round(n / 1000) / 10).toString() + '만원'; }
   function comma(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
   function eok(m) {
     if (!m) return '-';
     var e = Math.floor(m / 10000), r = m % 10000;
-    if (!e) return comma(r) + '만 원';
-    return e + '억' + (r ? ' ' + comma(r) + '만' : '') + ' 원';
+    if (!e) return comma(r) + '만원';
+    return e + '억' + (r ? ' ' + comma(r) + '만' : '') + '원';
   }
   var uid = 0;
 
@@ -55,7 +56,7 @@
     var ARROW = '<svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>';
     root.innerHTML =
       '<form class="calc-form" novalidate>' +
-      '<fieldset class="cq"><legend><i>1</i>사업자 유형</legend><div class="seg" data-name="type"><button type="button" class="on" data-v="personal">개인 사업자</button><button type="button" data-v="corp">법인 사업자</button></div></fieldset>' +
+      '<fieldset class="cq"><legend><i>1</i>사업자 유형</legend><div class="seg" data-name="type"><button type="button" class="on" data-v="personal">개인사업자</button><button type="button" data-v="corp">법인사업자</button></div></fieldset>' +
       '<fieldset class="cq"><legend><i>2</i>업종</legend><select class="f-ind" aria-label="업종">' + IND.map(function (o) { return '<option value="' + o[0] + '">' + o[1] + '</option>'; }).join('') + '</select></fieldset>' +
       '<fieldset class="cq"><legend><i>3</i>작년 매출액</legend>' +
       '<div class="seg" data-name="period"><button type="button" class="on" data-v="year">연 매출</button><button type="button" data-v="month">월 평균 매출</button></div>' +
@@ -133,7 +134,7 @@
       else if (b) sub.push('예상');
       if (add) sub.push('직원 ' + emp + '명 ' + won(add) + ' 포함');
       var data = {
-        type: corp ? '법인 사업자' : '개인 사업자', industry: I[1],
+        type: corp ? '법인사업자' : '개인사업자', industry: I[1],
         sales: isNew ? '올해 신규' + (m ? ' (' + eok(m) + ')' : '') : '연 ' + eok(m),
         salesMan: m, book: book, plan: plan, price: price, est: !liteOk, staff: staffText()
       };
@@ -144,7 +145,7 @@
         '<p class="cr-price"><b>' + price.replace(/부터$/, '') + '</b><span>' + sub.join(' · ') + '</span></p>' +
         '<p class="cr-reco">' + reco + '</p>' +
         '<p class="cr-hook">새로 맡기시면 <b>첫 달 기장료는 0원</b>입니다.</p>' +
-        '<dl class="cr-sum">' + rows.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>'; }).join('') + '</dl>' +
+        '<dl class="cr-sum">' + rows.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd></div>'; }).join('') + '</dl>' +
         '<button class="btn btn-accent btn-block btn-lg cr-go" type="button">' + (opts.applyText || '이 내용으로 상담 신청하기') + ARROW + '</button>' +
         '<p class="cr-fine">정확한 금액은 담당 세무사가 자료를 보고 알려 드립니다.' + (corp ? '' : ' 종합소득세 신고(조정료)는 별도로 안내해 드려요.') + '</p>' +
         '</div>';
