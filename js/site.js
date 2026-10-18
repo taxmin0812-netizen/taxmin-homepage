@@ -289,6 +289,28 @@
     track.addEventListener('scroll', function () { requestAnimationFrame(update); }, { passive: true });
     window.addEventListener('resize', update);
     window.addEventListener('load', update);
+
+    var AUTO = 3500, hold = false, seen = !('IntersectionObserver' in window), last = Date.now();
+    function poke() { last = Date.now(); }
+    function tick() {
+      if (reduce || hold || down || !seen || document.hidden) { poke(); return; }
+      if (document.getElementById('hero') && !document.documentElement.classList.contains('intro-done')) { poke(); return; }
+      if (Date.now() - last < AUTO) return;
+      var s = step(), max = track.scrollWidth - track.clientWidth;
+      poke();
+      if (max <= 2) return;
+      var next = track.scrollLeft >= max - 2 ? 0 : Math.min(max, (Math.round(track.scrollLeft / s) + 1) * s);
+      track.scrollTo({ left: next, behavior: 'smooth' });
+    }
+    track.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hold = true; });
+    track.addEventListener('pointerleave', function () { hold = false; poke(); });
+    track.addEventListener('focusin', function () { hold = true; });
+    track.addEventListener('focusout', function () { hold = false; poke(); });
+    track.addEventListener('pointerdown', poke);
+    track.addEventListener('touchstart', poke, { passive: true });
+    track.addEventListener('wheel', poke, { passive: true });
+    if (!seen) new IntersectionObserver(function (en) { seen = en[0].isIntersecting; poke(); }, { threshold: 0 }).observe(track);
+    if (!reduce) setInterval(tick, 250);
     update();
   })();
 
