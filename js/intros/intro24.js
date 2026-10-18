@@ -10,6 +10,7 @@
   var LIGHT = norm3([-0.30, 0.40, 1.0]);
   var BLUE = '#2554F0', INK = '#283044', MUTE = '#7A8397';
   var WASH = /[?&]paper=white/.test(location.search) ? 0 : 1;
+  var BOARD = /[?&]board=mat/.test(location.search) ? 0 : 1;
 
   var PAPERS = [
     { key: 'receipt', rect: [-20, 0, 40, 232], pivot: [38, 35], back: [0.965, 0.972, 0.984],
@@ -278,7 +279,7 @@
     'for(int i=1;i<5;i++){float f=float(i);r+=(texture(uS,uv+uR*f).r+texture(uS,uv-uR*f).r)*w[i];g+=(texture(uS,uv+uG*f).g+texture(uS,uv-uG*f).g)*w[i];}' +
     'o=vec4(r,g,0.0,1.0);}';
 
-  var FS_BG = '#version 300 es\nprecision highp float;uniform vec2 uRes;uniform mat4 uInv;uniform sampler2D uS;uniform vec4 uMat;uniform float uLeft;uniform float uBottom;out vec4 o;' +
+  var FS_BG = '#version 300 es\nprecision highp float;uniform vec2 uRes;uniform mat4 uInv;uniform sampler2D uS;uniform vec4 uMat;uniform float uLeft;uniform float uBottom;uniform float uBoard;out vec4 o;' +
     'float hs(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}' +
     'float ns(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.0-2.0*f);return mix(mix(hs(i),hs(i+vec2(1,0)),u.x),mix(hs(i+vec2(0,1)),hs(i+vec2(1,1)),u.x),u.y);}' +
     'float sdb(vec2 p,vec2 b,float r){vec2 q=abs(p)-b+r;return length(max(q,0.0))+min(max(q.x,q.y),0.0)-r;}' +
@@ -286,7 +287,7 @@
     'float tt=-a.z/(b.z-a.z);vec2 hp=(a.xyz+(b.xyz-a.xyz)*tt).xy;vec2 fw=max(fwidth(hp),vec2(0.001));' +
     'vec3 desk=vec3(0.953,0.958,0.966);float n=ns(hp*0.03)*0.55+ns(hp*vec2(0.02,0.25))*0.3+ns(hp*0.8)*0.15;desk*=0.985+0.025*n;' +
     'desk*=1.0+0.04*clamp(1.0-length((hp-vec2(-300.0,260.0))/620.0),0.0,1.0);' +
-    'vec2 mp=hp-uMat.xy;float d=sdb(mp,uMat.zw,16.0);' +
+    'vec2 mp=hp-uMat.xy;float d=sdb(mp,uMat.zw,mix(16.0,7.0,uBoard));' +
     'desk*=1.0-0.10*exp(-max(d,0.0)/3.0)*step(0.0,d);' +
     'vec3 mc=vec3(0.858,0.882,0.922)*(0.992+0.016*ns(hp*0.7));vec2 g=mp+uMat.zw;' +
     'vec2 g10=abs(fract(g/10.0+0.5)-0.5)*10.0;float l10=1.0-smoothstep(0.12,0.12+fw.x*1.3,min(g10.x,g10.y));' +
@@ -294,6 +295,11 @@
     'float inr=smoothstep(10.0,12.0,-d);mc=mix(mc,vec3(0.955,0.965,0.985),(l10*0.12+l50*0.26)*inr);' +
     'float tk=step(-d,9.0)*step(2.0,-d);float tick=tk*l10;mc=mix(mc,vec3(0.955,0.965,0.985),tick*0.35);' +
     'float rim=1.0-smoothstep(0.0,1.6,-d);mc*=1.0-0.06*rim;' +
+
+    'if(uBoard>0.5){vec3 wb=vec3(0.984,0.987,0.992)+0.008*(ns(hp*0.05)-0.5);' +
+    'float gb=exp(-pow((mp.x*0.55+mp.y*0.85-30.0)/70.0,2.0))*0.018;wb+=vec3(gb);' +
+    'float fr=1.0-smoothstep(5.0,6.0,-d);float fy=clamp(0.5+mp.y/(2.0*uMat.w),0.0,1.0);vec3 alu=mix(vec3(0.70,0.72,0.76),vec3(0.87,0.88,0.905),fy);' +
+    'float lip=exp(-pow((-d-6.0)/0.9,2.0))*0.10;wb*=1.0-lip;mc=mix(wb,alu,fr);mc*=1.0-0.05*rim;}' +
     'float am=clamp(0.5-d/(fw.x*1.2),0.0,1.0);vec3 c=mix(desk,mc,am);' +
     'vec2 s=texture(uS,uv).rg;float sh=clamp(s.r*0.50+s.g*0.56,0.0,0.92);c*=vec3(1.0)-sh*vec3(0.30,0.26,0.15);' +
     'c=mix(c,vec3(0.972,0.976,0.985),uLeft*(1.0-smoothstep(0.22,0.56,uv.x))*0.82);c=mix(c,vec3(0.972,0.976,0.985),uBottom*(1.0-smoothstep(0.30,0.62,uv.y))*0.85);' +
@@ -550,7 +556,7 @@
       gl.useProgram(P.bg.p); gl.bindVertexArray(VAO.empty);
       gl.bindTexture(gl.TEXTURE_2D, FB[0].t);
       gl.uniform2f(P.bg.u.uRes, cw, ch); gl.uniformMatrix4fv(P.bg.u.uInv, false, m4inv(VP)); gl.uniform1i(P.bg.u.uS, 0);
-      gl.uniform4f(P.bg.u.uMat, MAT[0], MAT[1], MAT[2], MAT[3]); gl.uniform1f(P.bg.u.uLeft, veilL); gl.uniform1f(P.bg.u.uBottom, veilB);
+      gl.uniform4f(P.bg.u.uMat, MAT[0], MAT[1], MAT[2], MAT[3]); gl.uniform1f(P.bg.u.uLeft, veilL); gl.uniform1f(P.bg.u.uBottom, veilB); gl.uniform1f(P.bg.u.uBoard, BOARD);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
 
       gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LEQUAL); gl.depthMask(true); gl.clear(gl.DEPTH_BUFFER_BIT);
