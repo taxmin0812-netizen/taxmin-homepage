@@ -1256,3 +1256,5 @@ p, .lead, .page-lead { text-wrap: pretty; }
 .dlg-result.calc-result { position: static; top: auto; min-height: 0; padding: 0; border: 0; background: none; box-shadow: none; display: block; text-align: left; }
 .dlg-result .cr-top { display: none; }
 .dlg-result .cr-card { padding: clamp(22px, 3vw, 30px); border: 1px solid #D6E1FF; border-radius: var(--r-lg); background: #fff; box-shadow: 0 30px 60px -36px rgba(37, 84, 240, .45); }
+
+@media (max-width: 374px) { .float-cta { left: 8px; right: 8px; gap: 6px; padding: 6px; } .float-cta a { padding: 0 8px; gap: 5px; font-size: 14.5px; } }
