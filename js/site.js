@@ -213,6 +213,14 @@
     spy();
   })();
 
+  $$('.copy-addr').forEach(function (bt) {
+    bt.addEventListener('click', function () {
+      var t = bt.getAttribute('data-copy'), ok = function () { bt.textContent = '복사했어요'; setTimeout(function () { bt.textContent = '주소 복사'; }, 1800); };
+      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(ok, function () {});
+      else { var ta = document.createElement('textarea'); ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); ok(); } catch (e) {} document.body.removeChild(ta); }
+    });
+  });
+
   (function () {
     var map = $('.fmap');
     if (!map) return;

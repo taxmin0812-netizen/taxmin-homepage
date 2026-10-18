@@ -1224,3 +1224,24 @@ p, .lead, .page-lead { text-wrap: pretty; }
 .yt-track:not(.at-end) { -webkit-mask-image: linear-gradient(90deg, #000 95%, transparent); mask-image: linear-gradient(90deg, #000 95%, transparent); }
 .calc-in-dlg .calc-actions { position: sticky; bottom: -1px; z-index: 2; background: #fff; padding: 10px 0 4px; margin-top: 4px; }
 .lead, .page-lead { text-wrap: pretty; }
+
+.visit { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 20px; align-items: stretch; }
+.visit-info { padding: clamp(24px, 3vw, 36px); background: #fff; border: 1px solid var(--line); border-radius: var(--r-lg); display: flex; flex-direction: column; }
+.visit-h { font-size: 22px; font-weight: 800; letter-spacing: -0.04em; }
+.visit-h span { margin-left: 6px; font-size: 15px; font-weight: 700; color: var(--blue); }
+.visit-list { margin-top: 18px; display: grid; }
+.visit-list > div { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 12px; padding: 13px 0; border-top: 1px solid var(--line); font-size: 15.5px; }
+.visit-list dt { color: var(--muted); font-weight: 600; }
+.visit-list dd { color: var(--ink); line-height: 1.6; }
+.visit-list dd a { color: var(--blue); font-weight: 700; }
+.copy-addr { margin-left: 6px; padding: 3px 9px; border: 1px solid var(--line-2); border-radius: 999px; background: #fff; font: inherit; font-size: 12.5px; font-weight: 700; color: var(--ink-2); vertical-align: 1px; }
+.copy-addr:hover { color: var(--blue); border-color: var(--blue); }
+.visit-cta { margin-top: auto; padding-top: 20px; display: flex; flex-wrap: wrap; gap: 8px; }
+.visit .map-box { height: auto; min-height: 420px; }
+.visit.no-map { grid-template-columns: minmax(0, 1fr); }
+.visit.no-map .map-box { display: none; }
+@media (min-width: 900px) { .visit.no-map .visit-list { grid-template-columns: 1fr 1fr; column-gap: 40px; } }
+@media (max-width: 900px) { .visit { grid-template-columns: minmax(0, 1fr); } .visit .map-box { min-height: 320px; } }
+@media (max-width: 560px) { .visit-list > div { grid-template-columns: 64px minmax(0, 1fr); font-size: 15px; } .visit-cta .btn { width: 100%; } }
+.wrap.visit { background: none; border: 0; border-radius: 0; padding-top: 0; padding-bottom: 0; }
+.visit-list > div { border-bottom: 0; }

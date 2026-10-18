@@ -5,7 +5,7 @@
   if (!box) return;
   var lat = +box.getAttribute('data-lat'), lng = +box.getAttribute('data-lng'), name = box.getAttribute('data-name') || '';
   var done = false;
-  function fail() { if (done) return; done = true; box.classList.add('map-off'); }
+  function fail() { if (done) return; done = true; box.classList.add('map-off'); if (box.parentElement) box.parentElement.classList.add('no-map'); }
   if (!KEY) { fail(); return; }
   window.navermap_authFailure = function () { box.classList.remove('map-on'); done = false; fail(); };
   window.__tmMap = function () {
