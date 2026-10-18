@@ -86,7 +86,7 @@ ul, ol { padding: 0; list-style: none; }
 
 .site-header { position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--header-h); color: var(--ink); transition: background-color .35s, box-shadow .35s, color .35s, opacity .7s, transform .7s var(--ease); }
 .js:not(.intro-done) .site-header:not(.is-scrolled) { opacity: 0; transform: translateY(-10px); pointer-events: none; }
-.site-header.is-scrolled { background: rgba(255, 255, 255, .88); box-shadow: 0 1px 0 rgba(15, 23, 42, .06); backdrop-filter: saturate(1.6) blur(16px); -webkit-backdrop-filter: saturate(1.6) blur(16px); }
+.site-header.is-scrolled { background: rgba(255, 255, 255, .88); box-shadow: 0 1px 0 rgba(15, 23, 42, .06); -webkit-backdrop-filter: saturate(1.6) blur(16px); backdrop-filter: saturate(1.6) blur(16px); -webkit-backdrop-filter: saturate(1.6) blur(16px); }
 .site-header.on-dark:not(.is-scrolled) { color: #fff; }
 .site-header.on-dark.is-scrolled { color: var(--ink); }
 .header-inner { height: 100%; display: flex; align-items: center; gap: 36px; }
@@ -165,7 +165,7 @@ ul, ol { padding: 0; list-style: none; }
 .hero.is-ready .hero-text > :nth-child(3) { transition-delay: .4s; }
 .hero.is-ready .hero-text > :nth-child(4) { transition-delay: .5s; }
 .hero-controls { position: absolute; z-index: 3; right: 28px; bottom: 84px; display: flex; gap: 8px; }
-.chip { min-height: 34px; padding: 0 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--ink-2); background: rgba(255, 255, 255, .8); border: 1px solid var(--line-2); backdrop-filter: blur(6px); }
+.chip { min-height: 34px; padding: 0 14px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--ink-2); background: rgba(255, 255, 255, .8); border: 1px solid var(--line-2); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 .chip:hover { color: var(--ink); border-color: var(--ink-2); }
 .scroll-cue { display: none; }
 .hero-trust { display: none; position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; pointer-events: none; }
@@ -573,7 +573,7 @@ ul, ol { padding: 0; list-style: none; }
 .copy { color: var(--faint); white-space: nowrap; }
 @media (max-width: 760px) { .footer-top, .footer-bottom { flex-direction: column; align-items: flex-start; } .site-footer { padding-bottom: 110px; } }
 
-.float-cta { position: fixed; z-index: 45; left: 50%; bottom: 22px; display: flex; gap: 6px; padding: 6px; border-radius: 16px; background: rgba(255, 255, 255, .95); border: 1px solid var(--line); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 20px 44px -16px rgba(15, 23, 42, .3); transform: translate(-50%, 160%); opacity: 0; transition: transform .5s var(--ease), opacity .4s; }
+.float-cta { position: fixed; z-index: 45; left: 50%; bottom: 22px; display: flex; gap: 6px; padding: 6px; border-radius: 16px; background: rgba(255, 255, 255, .95); border: 1px solid var(--line); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 20px 44px -16px rgba(15, 23, 42, .3); transform: translate(-50%, 160%); opacity: 0; transition: transform .5s var(--ease), opacity .4s; }
 .float-cta.show { transform: translate(-50%, 0); opacity: 1; }
 .float-cta a { display: inline-flex; align-items: center; gap: 8px; min-height: 46px; padding: 0 18px; border-radius: 11px; font-size: 15px; font-weight: 700; white-space: nowrap; }
 .fc-kakao { background: var(--kakao); color: #191919; }
@@ -684,7 +684,7 @@ a:hover .q-go .ico { transform: translateX(3px); }
 .dlg-open { overflow: hidden; }
 .dlg-open .float-cta { opacity: 0 !important; pointer-events: none !important; }
 .apply-dlg { padding: 0; border: 0; width: min(620px, calc(100% - 32px)); max-height: calc(100dvh - 48px); overflow: auto; overscroll-behavior: contain; border-radius: 26px; background: #fff; color: var(--ink); box-shadow: 0 40px 100px -30px rgba(11, 21, 48, .55); }
-.apply-dlg::backdrop { background: rgba(11, 21, 48, .48); backdrop-filter: blur(3px); }
+.apply-dlg::backdrop { background: rgba(11, 21, 48, .48); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
 .apply-dlg[open] { animation: dlgIn .34s var(--ease); }
 .apply-dlg[open]::backdrop { animation: dlgFade .3s ease; }
 @keyframes dlgIn { from { opacity: 0; transform: translateY(18px) scale(.985); } to { opacity: 1; transform: none; } }
@@ -1152,3 +1152,5 @@ button.dlg-banner { width: 100%; border: 0; text-align: left; cursor: pointer; f
 .plan-main .pp-vat { color: rgba(255, 255, 255, .7); }
 .more-vat { display: block; margin-top: -4px; font-size: 12.5px; color: var(--muted); }
 .cs-plan small { font-size: 12px; color: var(--muted); }
+
+.header-actions .btn-apply, .header-actions .btn-kakao { display: none; }
