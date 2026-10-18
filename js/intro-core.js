@@ -201,7 +201,7 @@
       mode = layoutMode();
       hero.setAttribute('data-layout', mode);
 
-      if (mode === 'side') { var col = Math.min(W, 1136); logo = { x: Math.min(W * 0.735, (W - col) / 2 + col * 0.8), y: H * 0.5, s: Math.min(H * 0.48, W * 0.33) }; }
+      if (mode === 'side') { var col = Math.min(W, 1136); logo = { x: Math.min(W * 0.735, (W - col) / 2 + col * 0.87), y: H * 0.5, s: Math.min(H * 0.48, W * 0.33) }; }
       else if (mode === 'stack') logo = { x: W * 0.5, y: H * 0.30, s: Math.min(W * 0.56, H * 0.27) };
       else if (W >= H) logo = { x: W * 0.5, y: H * 0.385, s: H * 0.40 };
       else logo = { x: W * 0.5, y: H * 0.385, s: W * 0.62 };
