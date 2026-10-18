@@ -1172,7 +1172,6 @@ button.dlg-banner { width: 100%; border: 0; text-align: left; cursor: pointer; f
 .areas li { background: var(--soft); color: var(--ink-2); }
 .fm-node b { box-shadow: none; }
 .fm-node.on b { box-shadow: 0 14px 30px -10px rgba(37, 84, 240, .6); }
-.roadmap li + li::before { width: 8px; height: 8px; border: 0; background: var(--blue); left: -4px; top: 34px; }
 .start { grid-template-columns: 1fr; gap: 20px; }
 .start-steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .calc-reset { border: 0; background: none; font-size: 13px; padding: 4px 0; }
@@ -1193,8 +1192,7 @@ p, .lead, .page-lead { text-wrap: pretty; }
 .cr-plans span { color: var(--ink-2); }
 .cr-plans b { font-weight: 800; color: var(--ink); }
 .cr-plans-vat { margin-top: 6px; font-size: 12px; color: var(--muted); }
-@media (min-width: 1000px) { .yt-track { margin-right: calc(50% - 50vw); padding-right: 32px; } }
-@media (max-width: 1000px) { .roadmap li + li::before { left: 28px; top: -4px; } .start-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 1000px) { .start-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 700px) { .start-steps { grid-template-columns: 1fr; } }
 @media (max-width: 760px) { .num-row { flex-direction: row; align-items: center; } .num-row .num-hint { align-self: auto; white-space: nowrap; } }
 @media (max-width: 640px) {
@@ -1206,3 +1204,18 @@ p, .lead, .page-lead { text-wrap: pretty; }
 
 .map-box.map-off { height: auto; min-height: 0; padding: 36px 20px; }
 .map-off .map-fallback { position: static; }
+
+@media (min-width: 1001px) { .roadmap li + li::before { width: 8px; height: 8px; border: 0; background: var(--blue); left: -4px; top: 34px; } }
+@media (max-width: 1000px) { .roadmap li + li::before { display: none; } }
+.calc-result.has { place-items: normal; }
+.cr-go { white-space: normal; }
+.calc-in-dlg { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+@media (max-width: 960px) { .calc-in-dlg { grid-template-columns: minmax(0, 1fr); } }
+.calc-in-dlg .cq { margin-bottom: 16px; }
+.crumbs a { display: inline-block; padding: 8px 0; }
+.footer-links a { display: inline-block; padding: 8px 0; }
+.mm-cta { display: grid; gap: 8px; padding-bottom: 28px; }
+.mm-cta .btn { width: 100%; min-height: 52px; }
+.start-link { margin-top: 18px; text-align: center; font-size: 15px; color: var(--ink-2); }
+.start-link a { color: var(--blue); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.map-off + .map-bar .btn { display: none; }

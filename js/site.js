@@ -9,15 +9,18 @@
 
   var words = [];
   $$('[data-words]').forEach(function (el) {
-    var keys = ['한', '번', '더', '확인하고,', '미리'];
     var ws = el.textContent.trim().split(/\s+/);
+
+    var from = ws.indexOf('한', 4), to = ws.indexOf('확인하고,'), box = el, grp = null;
     el.textContent = '';
     ws.forEach(function (w, k) {
+      if (k === from && to > from) { grp = document.createElement('span'); grp.className = 'nw'; el.appendChild(grp); box = grp; }
       var sp = document.createElement('span');
-      sp.className = 'w' + (keys.indexOf(w) >= 0 ? ' key' : '');
+      sp.className = 'w' + ((k >= from && k <= to && from > 0) || w === '미리' ? ' key' : '');
       sp.textContent = w;
-      el.appendChild(sp);
-      if (k < ws.length - 1) el.appendChild(document.createTextNode(' '));
+      box.appendChild(sp);
+      if (k === to && grp) { box = el; grp = null; }
+      if (k < ws.length - 1) (grp || el).appendChild(document.createTextNode(' '));
     });
     words = words.concat($$('.w', el));
   });
@@ -178,9 +181,15 @@
       count(works[i]);
       if (i < 4) { later(function () { pulse('fwd'); }, 1300); later(function () { MSG[i].forEach(bubble); }, 1900); }
       else { later(function () { bubble(MSG[4][0]); }, 300); later(function () { pulse('rev'); }, 900); later(function () { bubble(MSG[4][1]); }, 2300); }
-      if (live && !reduce) timer = setTimeout(function () { go((cur + 1) % 5); }, D);
+      if (live && !reduce && !manual && !paused) timer = setTimeout(function () { go((cur + 1) % 5); }, D);
     }
-    steps.forEach(function (li, k) { $('button', li).addEventListener('click', function () { go(k); }); });
+    var manual = false, paused = false;
+    steps.forEach(function (li, k) { $('button', li).addEventListener('click', function () { manual = true; mg.classList.add('is-manual'); go(k); }); });
+    function hold(v) { paused = v; if (v) clearTimeout(timer); else if (live && !manual && !reduce) { clearTimeout(timer); timer = setTimeout(function () { go((cur + 1) % 5); }, D); } }
+    mg.addEventListener('mouseenter', function () { hold(true); });
+    mg.addEventListener('mouseleave', function () { hold(false); });
+    mg.addEventListener('focusin', function () { hold(true); });
+    mg.addEventListener('focusout', function () { hold(false); });
     if (reduce) { MSG.forEach(function (g) { g.forEach(bubble); }); return; }
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (es) {
@@ -212,6 +221,10 @@
       rows.forEach(function (r) { r.classList.toggle('on', r.getAttribute('data-k') === k); });
       nodes.forEach(function (n) { n.classList.toggle('on', n.getAttribute('data-k') === k); });
     }
+    rows.forEach(function (r) {
+      r.addEventListener('mouseenter', function () { hold = true; cur = +r.getAttribute('data-k'); on(String(cur)); });
+      r.addEventListener('mouseleave', function () { hold = false; });
+    });
     on('1'); cur = 1;
     if (!reduce) setInterval(function () { if (hold || document.hidden) return; cur = cur % 8 + 1; on(String(cur)); }, 2400);
   })();
@@ -346,10 +359,10 @@
 
         var t = text(), msgEl = $('.pd-msg', done), pre = $('.pd-text', done);
         copy(t).then(function () {
-          msgEl.innerHTML = '<b>계산 내용을 복사했어요.</b> 아래 <b>카카오톡 열기</b>를 누른 뒤, 채팅 입력창에 <b>붙여 넣어</b>(휴대폰은 꾹 누르기, PC 는 Ctrl+V) 보내 주세요.';
+          msgEl.innerHTML = '<b>계산 내용을 복사했어요.</b> 아래 <b>카카오톡 열기</b>를 누른 뒤, 채팅 입력창에 <b>붙여 넣어</b>(휴대폰은 꾹 누르기, PC는 Ctrl+V) 보내 주세요.';
           pre.hidden = true;
         }, function () {
-          msgEl.innerHTML = '<b>자동 복사가 안 됐어요.</b> 아래 내용을 복사(휴대폰은 꾹 누르기, PC 는 끌어서 Ctrl+C)한 뒤, 카카오톡 채팅창에 붙여 넣어 주세요.';
+          msgEl.innerHTML = '<b>자동 복사가 안 됐어요.</b> 아래 내용을 복사(휴대폰은 꾹 누르기, PC는 끌어서 Ctrl+C)한 뒤, 카카오톡 채팅창에 붙여 넣어 주세요.';
           pre.textContent = t; pre.hidden = false;
         });
         done.hidden = false;
@@ -377,7 +390,7 @@
       var map = { 'f-type': d.type, 'f-ind': d.industry, 'f-sales': d.sales, 'f-book': d.book, 'f-plan': d.plan + ' ' + (d.est ? '예상 ' : '') + d.price + ' (부가세 별도)', 'f-staff': d.staff };
       Object.keys(map).forEach(function (id) { $('#' + id, dlg).value = map[id]; });
       $('#calc-sum', dlg).innerHTML = '<div class="cs-top"><span>계산한 내용</span><button type="button" data-back2="calc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4.2L19.4 8.8a2.1 2.1 0 0 0 0-3L18.2 4.6a2.1 2.1 0 0 0-3 0L4 15.8z"/><path d="M13.6 6.2l4.2 4.2"/></svg>고치기</button></div>' +
-        '<p class="cs-plan">추천 요금제 <b>' + esc(d.plan) + '</b> · ' + (d.est ? '예상 ' : '') + esc(d.price) + ' <small>부가세 별도</small></p>' +
+        '<p class="cs-plan">추천 요금제 <b>' + esc(d.plan) + '</b> · ' + '<span class="nw">' + (d.est ? '예상 ' : '') + esc(d.price) + '</span> <small>부가세 별도</small></p>' +
         '<p class="cs-rows">' + [d.type, d.industry, d.sales, '인건비 신고 ' + d.staff].map(esc).join(' · ') + '</p>';
       $('[data-back2]', dlg).addEventListener('click', function () { step('calc'); });
     }
@@ -414,6 +427,8 @@
       $$('.dlg-step', dlg).forEach(function (el) { el.hidden = el.getAttribute('data-step') !== name; });
       dlg.classList.toggle('is-form', name === 'form');
       dlg.scrollTop = 0;
+      var h = $('.dlg-step[data-step="' + name + '"] h2', dlg);
+      if (h) { if (!h.id) h.id = 'apply-title-' + name; dlg.setAttribute('aria-labelledby', h.id); }
 
       dlg.setAttribute('tabindex', '-1'); try { dlg.focus({ preventScroll: true }); } catch (e) {}
     }
@@ -443,6 +458,7 @@
     }
     function submit(e) {
       e.preventDefault();
+      var tel = $('#f-tel', form); tel.setCustomValidity(tel.validity.patternMismatch ? '010-0000-0000처럼 숫자로 적어 주세요.' : '');
       if (!form.checkValidity()) { form.reportValidity(); return; }
       var hp = form.querySelector('input[name="_honey"]');
       if (hp && hp.value) { form.reset(); chips(); say(true, '상담 신청이 접수되었습니다.'); return; }

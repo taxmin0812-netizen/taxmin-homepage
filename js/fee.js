@@ -110,11 +110,12 @@
       var corp = st.type === 'corp', I = ind(), m = annual(), isNew = $('.f-new').checked;
       var err = $('.calc-err');
       if (!isNew && !m) {
-        err.hidden = false; err.textContent = '작년 매출액을 넣어 주세요. 올해 처음 시작했다면 아래 칸에 표시해 주세요.';
+        err.hidden = false; err.textContent = '작년 매출액을 넣어 주세요. 올해 처음 시작했다면 위의 ‘올해 새로 시작한 사업이에요’에 표시해 주세요.';
+        $('.f-sales').setAttribute('aria-invalid', 'true');
         try { $('.f-sales').focus(); } catch (e) {}
         return null;
       }
-      err.hidden = true;
+      err.hidden = true; $('.f-sales').removeAttribute('aria-invalid');
       var emp = st.staff === 'yes' ? num($('.f-emp')) : 0;
       var book, plan, liteOk = false, b = null, add = 0;
       if (corp) { book = '복식부기(법인)'; plan = '법인 기장'; b = band(BANDS.corp[I[3]], m); }
@@ -131,8 +132,8 @@
       }
       var price = liteOk ? '월 ' + won(START.lite) : b.consult ? '월 ' + won(b.lo) + '부터' : '월 ' + man(b.lo) + '~' + won(b.hi);
       var reco = liteOk
-        ? '사장님께는 <b>' + plan + '</b>를 추천해요. ' + price + '으로 시작하실 수 있어요.' + (emp ? ' 인건비(원천세) 신고도 포함이에요.' : '')
-        : (corp ? '대표님' : '사장님') + '께는 <b>' + plan + '</b>을 추천해요. 예상 금액은 <b>' + price + '</b>입니다.' + (b.consult ? ' 정확한 금액은 상담 때 정해 드려요.' : '');
+        ? '사장님께는 <b>' + plan + '</b>를 추천해요. <span class="nw">' + price + '으로</span> 시작하실 수 있어요.' + (emp ? ' 인건비(원천세) 신고도 포함이에요.' : '')
+        : (corp ? '대표님' : '사장님') + '께는 <b>' + plan + '</b>을 추천해요. 예상 금액은 <b class="nw">' + price + '</b>입니다.' + (b.consult ? ' 정확한 금액은 상담 때 정해 드려요.' : '');
       var sub = [];
       if (b && b.consult) sub.push('상담 후 확정');
       else if (b) sub.push('예상');
