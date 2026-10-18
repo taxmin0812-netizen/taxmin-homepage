@@ -9,6 +9,7 @@
   if (!KEY) { fail(); return; }
   window.navermap_authFailure = function () { box.classList.remove('map-on'); done = false; fail(); };
   window.__tmMap = function () {
+    if (box.classList.contains('map-on')) return;
     try {
       var pos = new naver.maps.LatLng(lat, lng);
       var map = new naver.maps.Map(box.querySelector('.map-canvas'), {
@@ -23,9 +24,10 @@
     } catch (e) { fail(); }
   };
   var s = document.createElement('script');
-  s.src = 'https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=' + encodeURIComponent(KEY) + '&callback=__tmMap';
+  s.src = 'https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=' + encodeURIComponent(KEY);
   s.async = true;
+  s.onload = function () { if (window.naver && naver.maps) window.__tmMap(); else fail(); };
   s.onerror = fail;
   document.head.appendChild(s);
-  setTimeout(function () { if (!box.classList.contains('map-on')) fail(); }, 9000);
+  setTimeout(function () { if (!box.classList.contains('map-on')) fail(); }, 12000);
 })();
