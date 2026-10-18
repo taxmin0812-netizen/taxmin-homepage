@@ -258,7 +258,7 @@
     try { seen = sessionStorage.getItem('min-intro-seen') === '1'; } catch (e) {}
     var t = 0, last = 0, speed = 1, visible = true, running = false;
     api.fadeFrom = 0;
-    if (seen && !/[?&]intro=/.test(location.search)) { t = V.revisitAt || 6.4; api.fadeFrom = t; }
+    if (seen) { t = V.revisitAt || 6.4; api.fadeFrom = t; }
     if (reduce) { t = 12; api.fadeFrom = 0; }
     if (FROZEN !== null) { t = FROZEN; api.fadeFrom = 0; }
     if (V.prepare) V.prepare(t, api);

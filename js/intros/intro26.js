@@ -10,7 +10,6 @@
   var LIGHT = norm3([-0.30, 0.40, 1.0]);
   var BLUE = '#2554F0', INK = '#283044', MUTE = '#7A8397';
   var WASH = /[?&]paper=white/.test(location.search) ? 0 : 1;
-  var BOARD = /[?&]board=mat/.test(location.search) ? 0 : 1;
 
   var PAPERS = [
     { key: 'receipt', rect: [-20, 0, 40, 232], pivot: [38, 35], back: [0.965, 0.972, 0.984],
