@@ -74,7 +74,11 @@
     var form = root.querySelector('.calc-form'), out = root.querySelector('.calc-result');
     var $ = function (s) { return root.querySelector(s); };
     var st = { type: 'personal', period: 'year', staff: 'no' };
-    var EMPTY = '<div class="cr-empty"><p>내용을 고르고 <b>계산하기</b>를 누르면<br>사장님 매출에 맞는 요금제를 추천해 드려요.</p></div>';
+    var EMPTY = '<div class="cr-empty"><p class="cr-k">택스민 기장료</p><ul class="cr-plans">' +
+      '<li><span>택스민 라이트</span><b>월 ' + won(START.lite) + '</b></li>' +
+      '<li><span>스탠다드 기장</span><b>월 ' + won(START.standard) + '~</b></li>' +
+      '<li><span>법인 기장</span><b>월 ' + won(START.corp) + '~</b></li></ul>' +
+      '<p class="cr-plans-vat">부가세 별도</p><p>내용을 고르고 <b>계산하기</b>를 누르면<br>사장님 매출에 맞는 요금제를 추천해 드려요.</p></div>';
     out.innerHTML = EMPTY;
 
     function num(el) { var v = parseInt(String(el.value).replace(/[^0-9]/g, ''), 10); return isNaN(v) ? 0 : v; }
@@ -106,7 +110,7 @@
       var corp = st.type === 'corp', I = ind(), m = annual(), isNew = $('.f-new').checked;
       var err = $('.calc-err');
       if (!isNew && !m) {
-        err.hidden = false; err.textContent = '작년 매출액을 넣어 주세요. 올해 처음 시작했다면 아래 칸을 체크해 주세요.';
+        err.hidden = false; err.textContent = '작년 매출액을 넣어 주세요. 올해 처음 시작했다면 아래 칸에 표시해 주세요.';
         try { $('.f-sales').focus(); } catch (e) {}
         return null;
       }
@@ -128,11 +132,11 @@
       var price = liteOk ? '월 ' + won(START.lite) : b.consult ? '월 ' + won(b.lo) + '부터' : '월 ' + man(b.lo) + '~' + won(b.hi);
       var reco = liteOk
         ? '사장님께는 <b>' + plan + '</b>를 추천해요. ' + price + '으로 시작하실 수 있어요.' + (emp ? ' 인건비(원천세) 신고도 포함이에요.' : '')
-        : '사장님께는 <b>' + plan + '</b>을 추천해요. 예상 금액은 <b>' + price + '</b>입니다.' + (b.consult ? ' 정확한 금액은 상담 때 정해 드려요.' : '');
+        : (corp ? '대표님' : '사장님') + '께는 <b>' + plan + '</b>을 추천해요. 예상 금액은 <b>' + price + '</b>입니다.' + (b.consult ? ' 정확한 금액은 상담 때 정해 드려요.' : '');
       var sub = [];
-      if (b && b.consult) sub.push('부터 · 상담 후 확정');
+      if (b && b.consult) sub.push('상담 후 확정');
       else if (b) sub.push('예상');
-      if (add) sub.push('직원 ' + emp + '명 ' + won(add) + ' 포함');
+      if (add) sub.push('직원 ' + emp + '명 추가분 ' + won(add) + ' 포함');
       sub.push('부가세 별도');
       var data = {
         type: corp ? '법인사업자' : '개인사업자', industry: I[1],
@@ -141,9 +145,9 @@
       };
       var rows = [['사업자', data.type], ['업종', data.industry], ['매출', data.sales], ['인건비 신고', data.staff]];
       out.innerHTML = '<div class="cr-card">' +
-        '<div class="cr-top"><p class="cr-k">사장님 매출에 맞는 추천 요금제</p></div>' +
+        '<div class="cr-top"><p class="cr-k">' + (corp ? '대표님' : '사장님') + ' 매출에 맞는 추천 요금제</p></div>' +
         '<h3>' + plan + '</h3>' +
-        '<p class="cr-price"><b>' + price.replace(/부터$/, '') + '</b><span>' + sub.join(' · ') + '</span></p>' +
+        '<p class="cr-price"><b>' + price + '</b><span>' + sub.join(' · ') + '</span></p>' +
         '<p class="cr-reco">' + reco + '</p>' +
         '<dl class="cr-sum">' + rows.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd></div>'; }).join('') + '</dl>' +
         '<button class="btn btn-accent btn-block btn-lg cr-go" type="button">' + (opts.applyText || '이 내용으로 상담 신청하기') + ARROW + '</button>' +

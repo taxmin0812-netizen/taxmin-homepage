@@ -42,7 +42,10 @@
     header.classList.toggle('on-dark', dark);
     header.classList.toggle('on-light', !dark);
 
-    if (fcta) fcta.classList.add('show');
+    if (fcta) {
+      var near = $$('.contact-head, .site-footer').some(function (el) { var b = el.getBoundingClientRect(); return b.top < vh - 40 && b.bottom > 0; });
+      fcta.classList.toggle('show', !near);
+    }
 
     if (statement && words.length) {
       var rs = statement.getBoundingClientRect();
@@ -139,9 +142,9 @@
     var steps = $$('.mg-steps li', mg), works = $$('.mw', mg), list = $('.kp-list', mg), link = $('.mg-link', mg);
     var D = 3600, cur = -1, timer = null, live = false, ts = [];
     var MSG = [
-      [{ t: 't', h: '대표님, <b>7월 매출 보고서</b> 보내 드려요.', c: ['7월 매출', '5,376만원 ↗'] }],
+      [{ t: 't', h: '사장님, <b>7월 매출 보고서</b> 보내 드려요.', c: ['7월 매출', '5,376만원 ↗'] }],
       [{ t: 't', h: '이번 달 <b>원천세 신고</b> 마쳤어요.', c: ['직원 3명', '신고 완료 ✓'] }],
-      [{ t: 't', h: '<b>상반기 가결산</b>이에요. 예상 세액을 미리 알려 드려요.', c: ['예상 세액', '5,383만원'] }],
+      [{ t: 't', h: '<b>상반기 가결산</b>이에요. 예상 세액을 미리 알려 드려요.', c: ['예상 세액', '1,230만원'] }],
       [{ t: 't', h: '두 세무사가 <b>한 번 더 확인</b>했어요. 이제 신고할게요.' }],
       [{ t: 'u', h: '영수증 사진 보낼게요!', p: 1 }, { t: 't', h: '받았어요. 장부에 바로 반영할게요.' }]
     ];
@@ -171,7 +174,7 @@
       clearT(); cur = i;
       steps.forEach(function (li, k) { li.classList.toggle('on', k === i); });
       works.forEach(function (w, k) { w.classList.toggle('on', k === i); });
-      if (i === 0) list.innerHTML = '';
+      if (i === 0) { list.innerHTML = ''; bubble({ t: 't', h: '사장님, 이번 달 <b>신고 일정</b> 미리 알려 드려요.', c: ['원천세 신고', '매월 10일까지'] }); }
       count(works[i]);
       if (i < 4) { later(function () { pulse('fwd'); }, 1300); later(function () { MSG[i].forEach(bubble); }, 1900); }
       else { later(function () { bubble(MSG[4][0]); }, 300); later(function () { pulse('rev'); }, 900); later(function () { bubble(MSG[4][1]); }, 2300); }
@@ -274,7 +277,7 @@
       '<div class="dlg-cards">' +
 
       '<article class="dc dc-main"><span class="dc-tag">세무기장 계약 문의</span><h3>세무기장 상담</h3><p class="dc-desc">장부 정리와 세금 신고를 맡기고, 매달 보고까지 받는 세무기장을 상담합니다. 기장료를 계산한 뒤 신청서를 남겨 주시면 담당 세무사가 연락드립니다.</p>' +
-      '<ul class="dc-checks"><li>' + CHECK + '사장님 매출에 맞는 요금제와 예상 기장료를 바로 알려 드립니다.</li><li>' + CHECK + '다른 세무사무소에서 옮겨 오셔도 이전 장부까지 도와 드립니다.</li><li>' + CHECK + '계약 전이라도 편하게 물어보셔도 됩니다.</li></ul>' +
+      '<ul class="dc-checks"><li>' + CHECK + '사장님 매출에 맞는 요금제와 예상 기장료를 바로 알려 드립니다.</li><li>' + CHECK + '다른 세무사무소에서 옮겨 오셔도 이전 장부까지 도와 드립니다.</li><li>' + CHECK + '계약 전에도 편하게 물어보세요.</li></ul>' +
       '<button class="btn btn-accent btn-block" type="button" data-go="calc">기장료 계산하고 신청하기' + ARROW + '</button></article>' +
       '<article class="dc"><span class="dc-tag dc-tag-k">카카오톡 채널</span><h3>세금 질문 · 신고 상담</h3><p class="dc-desc">부가가치세·종합소득세 신고, 양도·증여·상속, 창업처럼 궁금한 세금 이야기는 카카오톡 채널로 편하게 물어보세요.</p>' +
       '<ul class="dc-checks"><li>' + CHECK + '궁금할 때 카카오톡으로 바로 물어보세요.</li><li>' + CHECK + '영수증·자료 사진도 카카오톡으로 바로 보낼 수 있습니다.</li></ul>' +
@@ -286,7 +289,7 @@
       '<div class="dlg-step" data-step="calc" hidden>' +
       '<button class="dlg-back" type="button" data-back="choose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>창구 다시 고르기</button>' +
       '<p class="dlg-k">1단계 · 기장료 계산</p><h2 class="dlg-h dlg-h-form">먼저 기장료를 확인해 볼까요?</h2>' +
-      '<p class="dlg-lead">계산한 내용이 신청서에 그대로 담겨, 담당 세무사가 더 빨리 안내해 드립니다.</p>' +
+      '<p class="dlg-lead">계산한 내용이 신청서에 그대로 담겨, 담당 세무사가 더 빨리 안내해 드립니다. 기장 상담이 아니시면 <a href="' + KAKAO + '" target="_blank" rel="noopener">카카오톡</a>이나 전화(0507-1428-6446)로 바로 문의해 주세요.</p>' +
       '<div class="calc-box calc-in-dlg" id="dlg-calc"></div>' +
       '</div>' +
 
@@ -343,10 +346,10 @@
 
         var t = text(), msgEl = $('.pd-msg', done), pre = $('.pd-text', done);
         copy(t).then(function () {
-          msgEl.innerHTML = '<b>계산 내용을 복사했어요.</b> 아래 <b>카카오톡 열기</b>를 누른 뒤, 채팅 입력창을 <b>꾹 눌러 붙여넣기</b> 하고 보내 주세요.';
+          msgEl.innerHTML = '<b>계산 내용을 복사했어요.</b> 아래 <b>카카오톡 열기</b>를 누른 뒤, 채팅 입력창에 <b>붙여 넣어</b>(휴대폰은 꾹 누르기, PC 는 Ctrl+V) 보내 주세요.';
           pre.hidden = true;
         }, function () {
-          msgEl.innerHTML = '<b>자동 복사가 안 됐어요.</b> 아래 내용을 꾹 눌러 복사한 뒤, 카카오톡 채팅창에 붙여 넣어 주세요.';
+          msgEl.innerHTML = '<b>자동 복사가 안 됐어요.</b> 아래 내용을 복사(휴대폰은 꾹 누르기, PC 는 끌어서 Ctrl+C)한 뒤, 카카오톡 채팅창에 붙여 넣어 주세요.';
           pre.textContent = t; pre.hidden = false;
         });
         done.hidden = false;
@@ -462,13 +465,13 @@
       }).then(function (res) {
         if (res.ok && String(res.j.success) === 'true') {
           form.reset(); chips();
-          say(true, '상담 신청이 접수되었습니다. 확인하는 대로 연락드릴게요.');
+          say(true, '상담 신청이 접수되었습니다. 확인하는 대로 연락드리겠습니다.');
           calcData = null;
         } else {
-          say(false, '지금은 신청서를 보내지 못했어요. 카카오톡이나 전화(0507-1428-6446)로 연락 주세요.');
+          say(false, '지금은 신청서를 보내지 못했습니다. 카카오톡이나 전화(0507-1428-6446)로 연락 주세요.');
         }
       }, function () {
-        say(false, '인터넷 연결 때문에 보내지 못했어요. 잠시 뒤 다시 보내거나 카카오톡·전화로 연락 주세요.');
+        say(false, '인터넷 연결 때문에 보내지 못했습니다. 잠시 뒤 다시 보내거나 카카오톡·전화로 연락 주세요.');
       }).then(function () { clearTimeout(tmo); send.disabled = false; send.innerHTML = SEND_TEXT; });
     }
     document.addEventListener('click', function (e) {
