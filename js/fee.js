@@ -68,10 +68,12 @@
       '<label class="fl"><span class="nl">프리랜서(3.3%) 수</span><span class="num"><input class="f-free" inputmode="numeric" autocomplete="off" placeholder="0"><span>명</span></span></label></div></fieldset>' +
       '<p class="calc-err" aria-live="assertive" hidden></p>' +
       '<div class="calc-actions"><button type="button" class="calc-reset"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4"/></svg>초기화</button>' +
-      '<button type="submit" class="btn btn-accent btn-block btn-lg">계산하기</button></div>' +
+      '<button type="submit" class="btn btn-accent btn-block btn-lg">' + (opts.submitText || '계산하기') + (opts.submitText ? ARROW : '') + '</button></div>' +
       '</form>' +
-      '<div class="calc-result" aria-live="polite"></div>';
-    var form = root.querySelector('.calc-form'), out = root.querySelector('.calc-result');
+      (opts.resultEl ? '' : '<div class="calc-result" aria-live="polite"></div>');
+
+    var form = root.querySelector('.calc-form'), out = opts.resultEl || root.querySelector('.calc-result');
+    if (opts.resultEl) { out.classList.add('calc-result'); out.setAttribute('aria-live', 'polite'); root.classList.add('calc-split'); }
     var $ = function (s) { return root.querySelector(s); };
     var st = { type: 'personal', period: 'year', staff: 'no' };
     var EMPTY = '<div class="cr-empty"><p class="cr-k">택스민 기장료</p><ul class="cr-plans">' +
@@ -79,7 +81,7 @@
       '<li><span>스탠다드 기장</span><b>월 ' + won(START.standard) + '~</b></li>' +
       '<li><span>법인 기장</span><b>월 ' + won(START.corp) + '~</b></li></ul>' +
       '<p class="cr-plans-vat">부가세 별도</p><p>내용을 고르고 <b>계산하기</b>를 누르면<br>사장님 매출에 맞는 요금제를 추천해 드려요.</p></div>';
-    out.innerHTML = EMPTY;
+    out.innerHTML = opts.resultEl ? '' : EMPTY;
 
     function num(el) { var v = parseInt(String(el.value).replace(/[^0-9]/g, ''), 10); return isNaN(v) ? 0 : v; }
     function annual() { var v = num($('.f-sales')); return st.period === 'month' ? v * 12 : v; }
@@ -159,7 +161,8 @@
         if (opts.onApply) opts.onApply(data);
         else if (window.TaxminApply) window.TaxminApply.open({ step: 'form', calc: data });
       });
-      if (opts.scrollTo) opts.scrollTo(out);
+      if (opts.onResult) opts.onResult(data);
+      else if (opts.scrollTo) opts.scrollTo(out);
       else if (window.innerWidth < 960) { try { out.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {} }
       return data;
     }
@@ -170,7 +173,7 @@
         Array.prototype.forEach.call(g.querySelectorAll('button'), function (b, i) { b.classList.toggle('on', i === 0); b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false'); });
       });
       $('.staff-row').hidden = true; $('.calc-err').hidden = true; hint();
-      out.classList.remove('has'); out.innerHTML = EMPTY;
+      out.classList.remove('has'); out.innerHTML = opts.resultEl ? '' : EMPTY;
     });
     return { calc: calc };
   }

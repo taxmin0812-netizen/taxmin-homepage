@@ -365,6 +365,12 @@
       '<div class="calc-box calc-in-dlg" id="dlg-calc"></div>' +
       '</div>' +
 
+      '<div class="dlg-step" data-step="result" hidden>' +
+      '<button class="dlg-back" type="button" data-back="calc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4.2L19.4 8.8a2.1 2.1 0 0 0 0-3L18.2 4.6a2.1 2.1 0 0 0-3 0L4 15.8z"/><path d="M13.6 6.2l4.2 4.2"/></svg>답 고치기</button>' +
+      '<p class="dlg-k">1단계 · 기장료 계산</p><h2 class="dlg-h dlg-h-form" id="dlg-result-h">사장님께 맞는 추천 요금제</h2>' +
+      '<div class="dlg-result" id="dlg-result"></div>' +
+      '</div>' +
+
       '<div class="dlg-step" data-step="form" hidden>' +
       '<button class="dlg-back dlg-recalc" type="button" data-back="calc"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M8.5 7.5h7M8.5 12h.01M12 12h.01M15.5 12h.01M8.5 16h.01M12 16h.01M15.5 16h.01"/></svg>기장료 다시 계산하기</button>' +
       '<form class="apply" id="apply" action="https://formsubmit.co/tax-min@naver.com" method="POST" accept-charset="UTF-8">' +
@@ -438,9 +444,10 @@
       if (calcMounted || !window.TaxminFee) return;
       calcMounted = true;
       window.TaxminFee.mount($('#dlg-calc', dlg), {
-        applyText: '이 내용으로 상담 신청서 쓰기',
-        onApply: function (d) { setCalc(d); step('form'); },
-        scrollTo: function (el) { try { el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) {} }
+        applyText: '이 내용으로 상담 신청서 쓰기', submitText: '추천 요금제 보기',
+        resultEl: $('#dlg-result', dlg),
+        onResult: function (d) { $('#dlg-result-h', dlg).textContent = (d.type === '법인사업자' ? '대표님' : '사장님') + '께 맞는 추천 요금제'; step('result'); },
+        onApply: function (d) { setCalc(d); step('form'); }
       });
     }
     function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -482,9 +489,11 @@
     }
     function step(name) {
       if (name === 'form' && !calcData) name = 'calc';
+      if (name === 'result' && !$('#dlg-result .cr-card', dlg)) name = 'calc';
       if (name === 'calc') mountCalc();
       $$('.dlg-step', dlg).forEach(function (el) { el.hidden = el.getAttribute('data-step') !== name; });
       dlg.classList.toggle('is-form', name === 'form');
+      dlg.setAttribute('data-step', name);
       dlg.scrollTop = 0;
       var h = $('.dlg-step[data-step="' + name + '"] h2', dlg);
       if (h) { if (!h.id) h.id = 'apply-title-' + name; dlg.setAttribute('aria-labelledby', h.id); }

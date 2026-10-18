@@ -1250,3 +1250,9 @@ p, .lead, .page-lead { text-wrap: pretty; }
 .yt-card b { font-size: 15px; }
 
 .map-box .map-canvas { position: absolute !important; inset: 0; }
+
+.calc-in-dlg.calc-split { grid-template-columns: minmax(0, 1fr); }
+.dlg-result { margin-top: 18px; }
+.dlg-result.calc-result { position: static; top: auto; min-height: 0; padding: 0; border: 0; background: none; box-shadow: none; display: block; text-align: left; }
+.dlg-result .cr-top { display: none; }
+.dlg-result .cr-card { padding: clamp(22px, 3vw, 30px); border: 1px solid #D6E1FF; border-radius: var(--r-lg); background: #fff; box-shadow: 0 30px 60px -36px rgba(37, 84, 240, .45); }
