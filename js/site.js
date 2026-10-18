@@ -238,6 +238,7 @@
       if (!thumb) return;
       var sw = track.scrollWidth, cw = track.clientWidth, max = sw - cw;
       bar.hidden = max <= 2;
+      track.classList.toggle('at-end', track.scrollLeft >= max - 2);
       var w = sw ? cw / sw : 1;
       thumb.style.width = (w * 100) + '%';
       thumb.style.transform = 'translateX(' + (max > 0 ? (track.scrollLeft / max) * (1 / w - 1) * 100 : 0) + '%)';
