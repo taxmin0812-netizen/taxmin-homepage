@@ -248,15 +248,33 @@
     var track = $('.yt-track');
     if (!track) return;
     var bar = $('.yt-bar'), thumb = bar && $('i', bar);
+
+    var orig = $$('.yt-card', track), setW = 0;
+    if (orig.length > 1) orig.forEach(function (c) {
+      var k = c.cloneNode(true); k.setAttribute('aria-hidden', 'true'); k.classList.add('yt-clone');
+      $$('a', k).forEach(function (a) { a.setAttribute('tabindex', '-1'); });
+      track.appendChild(k);
+    });
+    function measure() { var c = $('.yt-clone', track); setW = c ? c.offsetLeft - orig[0].offsetLeft : 0; }
+    function wrap() {
+      if (!setW || down) return;
+      if (track.scrollLeft >= setW - 2) {
+        track.style.scrollBehavior = 'auto'; track.style.scrollSnapType = 'none';
+        track.scrollLeft -= setW; void track.offsetWidth;
+        track.style.scrollSnapType = ''; track.style.scrollBehavior = '';
+      }
+    }
     function step() { var c = $('.yt-card', track); if (!c) return track.clientWidth; return c.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 16); }
     function update() {
       if (!thumb) return;
-      var sw = track.scrollWidth, cw = track.clientWidth, max = sw - cw;
+      var cw = track.clientWidth, max = track.scrollWidth - cw, tot = setW || track.scrollWidth;
       bar.hidden = max <= 2;
-      track.classList.toggle('at-end', track.scrollLeft >= max - 2);
-      var w = sw ? cw / sw : 1;
+      track.classList.toggle('at-end', !setW && track.scrollLeft >= max - 2);
+      var w = Math.min(1, tot ? cw / tot : 1);
+      var pos = setW ? (track.scrollLeft % setW) / setW : (max > 0 ? track.scrollLeft / max * (1 - w) : 0);
+      pos = Math.min(pos, 1 - w);
       thumb.style.width = (w * 100) + '%';
-      thumb.style.transform = 'translateX(' + (max > 0 ? (track.scrollLeft / max) * (1 / w - 1) * 100 : 0) + '%)';
+      thumb.style.transform = 'translateX(' + (w ? pos / w * 100 : 0) + '%)';
     }
     var down = false, moved = false, sx = 0, sl = 0, lx = 0, lt = 0, vx = 0, timer = 0;
     track.addEventListener('pointerdown', function (e) {
@@ -286,9 +304,10 @@
     window.addEventListener('pointercancel', end);
     track.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
     track.addEventListener('dragstart', function (e) { e.preventDefault(); });
-    track.addEventListener('scroll', function () { requestAnimationFrame(update); }, { passive: true });
-    window.addEventListener('resize', update);
-    window.addEventListener('load', update);
+    var idle = 0;
+    track.addEventListener('scroll', function () { requestAnimationFrame(update); clearTimeout(idle); idle = setTimeout(wrap, 160); }, { passive: true });
+    window.addEventListener('resize', function () { measure(); update(); });
+    window.addEventListener('load', function () { measure(); update(); });
 
     var AUTO = 3500, hold = false, seen = !('IntersectionObserver' in window), last = Date.now();
     function poke() { last = Date.now(); }
@@ -296,10 +315,11 @@
       if (reduce || hold || down || !seen || document.hidden) { poke(); return; }
       if (document.getElementById('hero') && !document.documentElement.classList.contains('intro-done')) { poke(); return; }
       if (Date.now() - last < AUTO) return;
+      wrap();
       var s = step(), max = track.scrollWidth - track.clientWidth;
       poke();
       if (max <= 2) return;
-      var next = track.scrollLeft >= max - 2 ? 0 : Math.min(max, (Math.round(track.scrollLeft / s) + 1) * s);
+      var next = setW ? Math.min(max, (Math.round(track.scrollLeft / s) + 1) * s) : (track.scrollLeft >= max - 2 ? 0 : Math.min(max, (Math.round(track.scrollLeft / s) + 1) * s));
       track.scrollTo({ left: next, behavior: 'smooth' });
     }
     track.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') hold = true; });
@@ -311,6 +331,7 @@
     track.addEventListener('wheel', poke, { passive: true });
     if (!seen) new IntersectionObserver(function (en) { seen = en[0].isIntersecting; poke(); }, { threshold: 0 }).observe(track);
     if (!reduce) setInterval(tick, 250);
+    measure();
     update();
   })();
 

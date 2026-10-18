@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  var KEY = '';
+  var KEY = '044i215glp';
   var box = document.getElementById('naver-map');
   if (!box) return;
   var lat = +box.getAttribute('data-lat'), lng = +box.getAttribute('data-lng'), name = box.getAttribute('data-name') || '';
