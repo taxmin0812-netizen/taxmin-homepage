@@ -1248,3 +1248,5 @@ p, .lead, .page-lead { text-wrap: pretty; }
 @media (max-width: 640px) { .section.yt-first { padding-top: 14px; } }
 
 .yt-card b { font-size: 15px; }
+
+.map-box .map-canvas { position: absolute !important; inset: 0; }
