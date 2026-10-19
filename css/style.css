@@ -1258,8 +1258,7 @@ p, .lead, .page-lead { text-wrap: pretty; }
 
 .site-footer { background: #F7F8FA; border-top: 1px solid var(--line); color: #8A93A6; padding: clamp(56px, 7vw, 84px) 0 64px; font-size: 13px; }
 .ft-grid { display: grid; grid-template-columns: minmax(240px, 1fr) minmax(0, 2.3fr); gap: 40px 64px; align-items: start; }
-.ft-logo { display: inline-flex; filter: grayscale(1); opacity: .55; transition: opacity .2s; }
-.ft-logo:hover { opacity: .85; }
+.ft-logo { display: inline-flex; }
 .ft-tag { margin-top: 14px; font-size: 14.5px; color: #7A8397; letter-spacing: -0.02em; }
 .ft-sns { margin-top: 22px; display: flex; gap: 10px; }
 .ft-sns a { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: #ECEEF2; color: #5E6779; transition: background .2s, color .2s; }
