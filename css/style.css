@@ -1276,3 +1276,13 @@ p, .lead, .page-lead { text-wrap: pretty; }
 .ft-copy { margin-top: 6px; }
 @media (max-width: 960px) { .ft-grid { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 640px) { .ft-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 20px; } .ft-col a { font-size: 14.5px; } .site-footer { padding-bottom: 72px; } }
+
+.brand-ic { width: 26px; height: 26px; }
+.brand-wm2 { display: block; height: 26px; width: 118.8px; flex-shrink: 0; }
+.site-header.on-dark:not(.is-scrolled) .brand { --mk: #fff; --wa: #fff; --wb: #9DB8FF; }
+@media (max-width: 640px) { .brand-ic { width: 22px; height: 22px; } .brand-wm2 { height: 22px; width: 100.5px; } }
+.footer-brand .brand-ic { width: 30px; height: 30px; }
+.footer-brand .brand-wm2 { height: 30px; width: 137.1px; }
+.contact-mark { width: 46px; height: 46px; }
+
+@media (min-width: 1001px) { .plan-grid { grid-template-columns: 1fr 1fr; } }

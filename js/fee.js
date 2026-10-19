@@ -76,8 +76,7 @@
     if (opts.resultEl) { out.classList.add('calc-result'); out.setAttribute('aria-live', 'polite'); root.classList.add('calc-split'); }
     var $ = function (s) { return root.querySelector(s); };
     var st = { type: 'personal', period: 'year', staff: 'no' };
-    var EMPTY = '<div class="cr-empty"><p class="cr-k">택스민 기장료</p><ul class="cr-plans">' +
-      '<li><span>택스민 라이트</span><b>월 ' + won(START.lite) + '</b></li>' +
+    var EMPTY = '<div class="cr-empty"><p class="cr-k">세무회계 민 기장료</p><ul class="cr-plans">' +
       '<li><span>스탠다드 기장</span><b>월 ' + won(START.standard) + '~</b></li>' +
       '<li><span>법인 기장</span><b>월 ' + won(START.corp) + '~</b></li></ul>' +
       '<p class="cr-plans-vat">부가세 별도</p><p>내용을 고르고 <b>계산하기</b>를 누르면<br>사장님 매출에 맞는 요금제를 추천해 드려요.</p></div>';
@@ -123,8 +122,8 @@
       if (corp) { book = '복식부기(법인)'; plan = '법인 기장'; b = band(BANDS.corp[I[3]], m); }
       else {
         book = I[2] === 0 ? '복식부기 의무(전문직)' : isNew ? '간편장부 대상(신규)' : m >= I[2] ? '복식부기 의무' : '간편장부 대상';
-        liteOk = book.indexOf('간편') === 0 && emp <= LITE_STAFF;
-        if (liteOk) plan = '택스민 라이트';
+        liteOk = false;
+        if (liteOk) plan = '세무회계 민 라이트';
         else { plan = '스탠다드 기장'; b = band(BANDS.personal[I[3]], m); }
       }
       if (b) {

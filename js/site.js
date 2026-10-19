@@ -461,7 +461,7 @@
     }
     function text() {
       var d = calcData || {};
-      return '[택스민 상담 신청]\n사업 형태: ' + (d.type || '-') + '\n업종: ' + (d.industry || '-') + '\n작년 매출: ' + (d.sales || '-') + '\n장부: ' + (d.book || '-') +
+      return '[세무회계 민 상담 신청]\n사업 형태: ' + (d.type || '-') + '\n업종: ' + (d.industry || '-') + '\n작년 매출: ' + (d.sales || '-') + '\n장부: ' + (d.book || '-') +
         '\n맞는 요금제: ' + (d.plan ? d.plan + ' ' + (d.est ? '예상 ' : '') + d.price : '-') + '\n인건비 신고: ' + (d.staff || '-') + '\n궁금한 것: ' + (pick.issue || '-');
     }
     function chips() {

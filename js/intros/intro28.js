@@ -1,4 +1,3 @@
- 
 (function () {
   'use strict';
   var M = window.MinIntro;
@@ -16,7 +15,6 @@
   function eo(a, b, x) { var t = clamp((x - a) / (b - a), 0, 1); return 1 - Math.pow(1 - t, 3); }
   function eio(t) { t = clamp(t, 0, 1); return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
 
-   
   var TYPES = [
     { name: 'invoice', w: 70, h: 99, at: [0, 0, 490, 693], back: [0.975, 0.978, 0.985] },
     { name: 'payslip', w: 70, h: 99, at: [500, 0, 490, 693], back: [0.975, 0.978, 0.985] },
@@ -27,7 +25,6 @@
   ];
   var TYPE_MIX = [0, 0, 1, 2, 3, 3, 4, 4, 5, 0, 2, 3];
 
-   
   var SHEETS = [];
   (function () {
     var R = M.rng(2610), order = [];
@@ -48,7 +45,6 @@
   var LAND0 = 1.18, LAND_SPAN = 1.15, LAND_D = 0.42;
   var COVER = [2.66, 3.06];
 
-   
   function m4mul(a, b) {
     var o = new Float32Array(16);
     for (var i = 0; i < 4; i++) for (var j = 0; j < 4; j++) { var s = 0; for (var k = 0; k < 4; k++) s += a[k * 4 + j] * b[i * 4 + k]; o[i * 4 + j] = s; }
@@ -85,7 +81,6 @@
     return [r00, r10, r20, 0, r01, r11, r21, 0, r02, r12, r22, 0, px, py, pz, 1];
   }
 
-   
   function writer(x) {
     return function (s, X, Y, size, wt, col, al) { x.font = (wt || 600) + ' ' + size + 'px ' + M.FONT; x.fillStyle = col || INK; x.textAlign = al || 'left'; x.textBaseline = 'alphabetic'; x.fillText(s, X, Y); };
   }
@@ -185,7 +180,8 @@
     return c;
   }
 
-  var ICON_M = 'M36 134V94a24 24 0 0 1 48 0v40M84 94c0-13 10.5-21 23-21c8 0 13.5 4 19 9.5L141 97', ICON_C = 'M136 129L170 95';
+  var MIN_MARK = { w: 478, h: 478, d: 'M10 0 469 0 478 9 478 379 477 380 458 380 457 379 457 21 395 21 394 22 394 380 374 380 374 22 373 21 21 21 21 456 22 457 457 457 457 418 458 417 477 417 478 418 478 468 474 472 467 478 11 478 1 469 0 467 0 10ZM109 98 309 98 318 107 319 109 319 306 310 316 308 316 308 317 110 317 100 307 100 107ZM121 119 121 296 297 296 297 295 298 295 298 119ZM165 153 289 153 289 174 176 174 176 287 155 287 155 163 159 160ZM155 325 175 325 176 326 176 388 477 388 478 389 478 409 165 409 162 406 155 399Z' };
+  var MIN_WM = { w: 923, h: 202, a: 'M132 13 153 13 153 183 132 183 132 182 131 182 131 14ZM426 13 428 13 428 15 430 17 430 20 431 20 431 22 433 24 433 27 434 27 431 30 429 30 429 31 426 31 426 32 423 32 423 33 413 34 413 35 381 35 381 17 413 17 413 16 423 15 423 14 426 14ZM475 13 497 13 497 183 475 183 475 141 471 145 466 147 465 149 460 150 458 152 449 153 449 154 349 154 349 135 397 135 397 123 382 119 379 116 377 116 376 114 374 114 369 109 369 107 367 106 366 101 365 101 365 89 366 89 366 86 369 83 369 81 373 77 375 77 377 74 379 74 379 73 381 73 385 70 391 69 391 68 403 67 403 66 420 67 420 68 425 68 425 69 428 69 428 70 431 70 431 71 435 72 436 74 438 74 439 76 441 76 445 80 445 82 447 83 447 85 449 87 449 91 450 91 450 99 449 99 449 103 448 103 447 107 439 115 437 115 436 117 434 117 430 120 427 120 427 121 418 122 418 124 417 124 417 135 448 135 448 134 453 134 453 133 462 131 465 128 467 128 468 126 470 126 471 124 473 124 475 122ZM653 13 675 13 675 182 674 182 674 183 653 183ZM98 14 118 14 119 15 119 179 97 179 97 77 75 77 75 57 97 57 97 15ZM620 14 640 14 641 15 641 178 640 179 619 179 619 92 601 92 601 141 579 141 579 41 526 41 526 22 585 22 590 27 600 36 600 39 619 39 619 15ZM196 16 313 16 314 17 314 92 211 92 204 86 196 77ZM34 18 56 18 56 59 57 59 57 68 58 68 60 83 61 83 61 86 62 86 62 89 63 89 63 92 64 92 65 96 67 97 68 101 73 106 73 108 77 111 77 113 82 118 84 118 88 123 91 124 91 126 77 140 75 140 56 122 56 120 53 118 53 116 51 115 51 113 49 112 49 110 46 106 46 104 44 103 42 110 40 111 39 115 37 116 37 118 35 119 35 121 33 122 31 127 27 130 27 132 14 145 12 145 10 142 8 142 7 140 5 140 4 138 2 138 0 136 0 127 11 117 11 115 17 109 17 107 19 106 21 100 23 99 23 97 25 95 25 92 26 92 26 90 28 88 28 85 29 85 29 82 30 82 30 78 31 78 31 74 32 74 32 68 33 68 33 55 34 55ZM217 35 217 73 218 74 292 74 292 35ZM356 43 456 43 457 44 457 61 356 61ZM601 58 601 73 619 73 619 58ZM400 84 400 85 396 85 396 86 394 86 394 87 392 87 388 90 388 92 387 92 388 100 391 101 394 104 397 104 397 105 413 106 413 105 421 104 421 103 423 103 427 100 427 98 428 98 427 90 424 87 416 85 416 84ZM175 109 335 109 336 110 336 128 268 128 268 129 267 129 267 185 246 185 246 128 175 128Z', b: 'M893 0 919 0 920 1 920 144 919 145 893 145ZM760 9 861 9 861 106 860 107 781 107 781 106 777 106 776 104 774 104 769 97 760 89 760 85 759 85 759 10ZM785 32 785 83 786 84 834 84 835 83 835 32ZM780 127 806 127 806 179 922 179 923 180 923 202 799 202 799 201 795 200 790 195 782 187 782 185 780 183Z' };
   function drawCover() {
     var w = CW * 10, h = CH * 10, c = document.createElement('canvas'); c.width = w; c.height = h; var x = c.getContext('2d');
     var g = x.createLinearGradient(0, 0, w, h); g.addColorStop(0, '#16305A'); g.addColorStop(0.55, NAVY); g.addColorStop(1, '#0A1930');
@@ -196,17 +192,16 @@
     x.restore();
     x.strokeStyle = 'rgba(255,255,255,.12)'; x.lineWidth = 3; x.strokeRect(34, 34, w - 68, h - 68);
 
-    var s = 2.5, ox = w / 2 - 103 * s, oy = h * 0.40 - 102 * s;
-    function icon(dx, dy, mc, cc) {
-      x.save(); x.translate(ox + dx, oy + dy); x.scale(s, s); x.lineCap = 'round'; x.lineJoin = 'round';
-      x.strokeStyle = mc; x.lineWidth = 27; x.stroke(new Path2D(ICON_M));
-      x.strokeStyle = cc; x.lineWidth = 26; x.stroke(new Path2D(ICON_C)); x.restore();
+    var mk = new Path2D(MIN_MARK.d), wa = new Path2D(MIN_WM.a), wb = new Path2D(MIN_WM.b);
+    var ms = 300 / MIN_MARK.w, mx = w / 2 - 150, my = h * 0.40 - 150;
+    var ts = 500 / MIN_WM.w, tx = w / 2 - 250, ty = h * 0.70 - MIN_WM.h * ts / 2;
+    function logo(dx, dy, ca, cb) {
+      x.save(); x.translate(mx + dx, my + dy); x.scale(ms, ms); x.fillStyle = ca; x.fill(mk, 'evenodd'); x.restore();
+      x.save(); x.translate(tx + dx, ty + dy); x.scale(ts, ts); x.fillStyle = ca; x.fill(wa, 'evenodd'); x.fillStyle = cb; x.fill(wb, 'evenodd'); x.restore();
     }
-    icon(0, 6, 'rgba(0,0,0,.35)', 'rgba(0,0,0,.35)');
-    icon(0, -2, 'rgba(255,255,255,.25)', 'rgba(255,255,255,.2)');
-    icon(0, 0, '#FFFFFF', CHECK);
-    x.font = '800 92px ' + M.FONT; x.textAlign = 'center'; x.fillStyle = '#FFFFFF'; x.fillText('택스민', w / 2, h * 0.70);
-    x.font = '700 26px ' + M.FONT; x.fillStyle = 'rgba(255,255,255,.62)'; x.fillText('T A X M I N  ·  세 무 회 계  민', w / 2, h * 0.70 + 56);
+    logo(0, 6, 'rgba(0,0,0,.35)', 'rgba(0,0,0,.35)');
+    logo(0, -2, 'rgba(255,255,255,.25)', 'rgba(255,255,255,.2)');
+    logo(0, 0, '#FFFFFF', '#9DB8FF');
     return c;
   }
   function texFrom(cv) {
@@ -221,8 +216,6 @@
     if (ATLAS) gl.deleteTexture(ATLAS); if (COVER_TEX) gl.deleteTexture(COVER_TEX);
     ATLAS = texFrom(drawAtlas()); COVER_TEX = texFrom(drawCover());
   }
-
-   
 
   var VS_SHEET = '#version 300 es\nlayout(location=0) in vec2 aG;layout(location=1) in vec4 aM0;layout(location=2) in vec4 aM1;layout(location=3) in vec4 aM2;layout(location=4) in vec4 aM3;' +
     'layout(location=5) in vec4 aUV;layout(location=6) in vec4 aB;layout(location=7) in vec3 aBk;uniform mat4 uVP;uniform float uShadow;uniform vec2 uSh;' +
@@ -272,7 +265,6 @@
     'c=mix(c,vec3(0.968,0.974,0.988),uLeft*(1.0-smoothstep(0.22,0.56,uv.x))*0.88);c=mix(c,vec3(0.968,0.974,0.988),uBottom*(1.0-smoothstep(0.30,0.62,uv.y))*0.9);' +
     'c+=(hs(gl_FragCoord.xy*0.731)-0.5)*0.008;o=vec4(c,1.0);}';
 
-   
   function target(w, h) {
     var t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
@@ -288,7 +280,6 @@
     FB = [target(w, h), target(w, h)]; FBW = w; FBH = h; gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   }
 
-   
   var INST = new Float32Array(N * 27);
   function stackTop(t) {
     var h = 0;
@@ -351,7 +342,6 @@
   }
   var GRID_N = 0;
 
-   
   function camera(t, api) {
     var W = api.W, H = api.H, L = api.logo, tall = api.mode === 'stack' || (api.mode === 'film' && H > W), rad = Math.PI / 180;
     var c = M.ease(2.05, 3.35, t);
@@ -417,7 +407,6 @@
       var cz = M.lerp(TH * N + 150, TH * N + CT / 2 + 0.3, ce) + 1.2 * Math.exp(-cl * 12) * Math.sin(cl * 26) * (cl > 0 ? 1 : 0);
       var coverM = model(M.lerp(0.5, 0.0, ce), M.lerp(-0.35, 0, ce), M.lerp(0.2, 0, ce), M.lerp(-30, 0, ce), M.lerp(24, 0, ce), cz);
 
-
       ensureFB(cw, ch);
       gl.disable(gl.DEPTH_TEST); gl.disable(gl.CULL_FACE);
       gl.bindFramebuffer(gl.FRAMEBUFFER, FB[0].f); gl.viewport(0, 0, FBW, FBH); gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT);
@@ -437,13 +426,11 @@
         gl.drawArrays(gl.TRIANGLES, 0, 3);
       });
 
-
       gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, cw, ch);
       gl.useProgram(P.floor.p); gl.bindVertexArray(VAO.empty); gl.bindTexture(gl.TEXTURE_2D, FB[0].t);
       gl.uniform2f(P.floor.u.uRes, cw, ch); gl.uniformMatrix4fv(P.floor.u.uInv, false, m4inv(VP)); gl.uniform1i(P.floor.u.uS, 0);
       gl.uniform1f(P.floor.u.uLeft, veilL); gl.uniform1f(P.floor.u.uBottom, veilB); gl.uniform3f(P.floor.u.uEye, eye[0], eye[1], eye[2]); gl.uniform2f(P.floor.u.uKey, -80, 90);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
-
 
       gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LEQUAL); gl.depthMask(true); gl.clear(gl.DEPTH_BUFFER_BIT);
       gl.useProgram(P.box.p); gl.bindVertexArray(VAO.box);
