@@ -82,6 +82,7 @@
       '<div class="cr-incl"><p class="cr-incl-k">모든 요금제에 포함</p><ul><li>장부 기장·부가가치세 신고</li><li>인건비(원천세) 신고</li><li>매달 매출 보고서</li><li>두 세무사가 한 번 더 확인</li></ul></div>' +
       '<p>내용을 고르고 <b>계산하기</b>를 누르면<br>사장님 매출에 맞는 요금제를 추천해 드려요.</p></div>';
     out.innerHTML = opts.resultEl ? '' : EMPTY;
+    var shown = false;
 
     function num(el) { var v = parseInt(String(el.value).replace(/[^0-9]/g, ''), 10); return isNaN(v) ? 0 : v; }
     function annual() { var v = num($('.f-sales')); return st.period === 'month' ? v * 12 : v; }
@@ -99,11 +100,37 @@
           if (name === 'staff') $('.staff-row').hidden = st.staff !== 'yes';
           if (name === 'period') hint();
           if (name === 'type') root.classList.toggle('is-corp', st.type === 'corp');
+          stale();
         });
       });
     });
-    $('.f-sales').addEventListener('input', function (e) { var v = num(e.target); e.target.value = v ? comma(v) : ''; hint(); });
-    ['.f-emp', '.f-free'].forEach(function (c) { $(c).addEventListener('input', function (e) { var v = num(e.target); e.target.value = v ? String(v) : ''; }); });
+    $('.f-sales').addEventListener('input', function (e) { var v = num(e.target); e.target.value = v ? comma(v) : ''; hint(); stale(); });
+    ['.f-emp', '.f-free'].forEach(function (c) { $(c).addEventListener('input', function (e) { var v = num(e.target); e.target.value = v ? String(v) : ''; stale(); }); });
+    $('.f-ind').addEventListener('change', stale);
+    $('.f-new').addEventListener('change', stale);
+
+    function stale() {
+      if (!shown) return; shown = false;
+      out.classList.remove('has');
+      if (opts.resultEl) { out.innerHTML = ''; return; }
+      out.innerHTML = '<div class="cr-empty cr-stale"><p class="cr-k">입력이 바뀌었어요</p><p>바뀐 내용으로 다시 계산해 주세요.</p><button type="button" class="btn btn-accent cr-recalc">다시 계산하기' + ARROW + '</button></div>';
+      out.querySelector('.cr-recalc').addEventListener('click', function () { calc(); });
+    }
+
+    function raw() { return { type: st.type, period: st.period, staff: st.staff, ind: $('.f-ind').selectedIndex, sales: num($('.f-sales')), isNew: $('.f-new').checked, emp: num($('.f-emp')), free: num($('.f-free')) }; }
+    function setSeg(name, v) {
+      Array.prototype.forEach.call(root.querySelectorAll('.seg[data-name="' + name + '"] button'), function (x) { var on = x.getAttribute('data-v') === v; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+      st[name] = v;
+    }
+    function restore(r) {
+      if (!r) return;
+      setSeg('type', r.type); setSeg('period', r.period); setSeg('staff', r.staff);
+      root.classList.toggle('is-corp', st.type === 'corp'); $('.staff-row').hidden = st.staff !== 'yes';
+      if (r.ind >= 0) $('.f-ind').selectedIndex = r.ind;
+      $('.f-sales').value = r.sales ? comma(r.sales) : ''; $('.f-new').checked = !!r.isNew;
+      $('.f-emp').value = r.emp ? String(r.emp) : ''; $('.f-free').value = r.free ? String(r.free) : '';
+      $('.calc-err').hidden = true; $('.f-sales').removeAttribute('aria-invalid'); hint();
+    }
 
     function ind() { var sel = $('.f-ind'); return IND[sel.selectedIndex] || IND[IND.length - 1]; }
     function staffText() { return st.staff === 'yes' ? '4대보험 ' + num($('.f-emp')) + '명 · 프리랜서 ' + num($('.f-free')) + '명' : '없음'; }
@@ -140,7 +167,7 @@
       var data = {
         type: corp ? '법인사업자' : '개인사업자', industry: I[1],
         sales: isNew ? '올해 신규' + (m ? ' (' + eok(m) + ')' : '') : '연 ' + eok(m),
-        salesMan: m, book: book, plan: plan, price: price, est: true, staff: staffText()
+        salesMan: m, book: book, plan: plan, price: price, est: true, staff: staffText(), raw: raw()
       };
       var rows = [['사업자', data.type], ['업종', data.industry], ['매출', data.sales], ['인건비 신고', data.staff]];
       out.innerHTML = '<div class="cr-card">' +
@@ -150,9 +177,9 @@
         '<p class="cr-reco">' + reco + '</p>' +
         '<dl class="cr-sum">' + rows.map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd></div>'; }).join('') + '</dl>' +
         '<button class="btn btn-accent btn-block btn-lg cr-go" type="button">' + (opts.applyText || '이 내용으로 상담 신청하기') + ARROW + '</button>' +
-        '<p class="cr-fine">정확한 금액은 담당 세무사가 자료를 보고 알려 드립니다.' + (corp ? '' : ' 종합소득세 신고(조정료)는 별도로 안내해 드려요.') + '</p>' +
+        '<p class="cr-fine">정확한 금액은 담당 세무사가 자료를 보고 알려 드립니다. ' + (corp ? '법인세' : '종합소득세') + ' 신고 보수(조정료)는 기장료와 별도이며, 신고 전에 미리 알려 드려요.</p>' +
         '</div>';
-      out.classList.add('has');
+      out.classList.add('has'); shown = true;
       out.querySelector('.cr-go').addEventListener('click', function () {
         if (opts.onApply) opts.onApply(data);
         else if (window.TaxminApply) window.TaxminApply.open({ step: 'form', calc: data });
@@ -169,9 +196,9 @@
         Array.prototype.forEach.call(g.querySelectorAll('button'), function (b, i) { b.classList.toggle('on', i === 0); b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false'); });
       });
       $('.staff-row').hidden = true; $('.calc-err').hidden = true; hint();
-      out.classList.remove('has'); out.innerHTML = opts.resultEl ? '' : EMPTY;
+      out.classList.remove('has'); out.innerHTML = opts.resultEl ? '' : EMPTY; shown = false;
     });
-    return { calc: calc };
+    return { calc: calc, restore: restore };
   }
 
   window.TaxminFee = { mount: mount, IND: IND, START: START };

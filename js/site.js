@@ -381,7 +381,7 @@
       '<p class="dlg-lead">상담 내용에 맞는 창구를 고르시면 더 빠르게 안내해 드립니다.</p>' +
       '<div class="dlg-cards">' +
 
-      '<article class="dc dc-main"><span class="dc-tag">세무기장 계약 문의</span><h3>세무기장 상담</h3><p class="dc-desc">장부 정리와 세금 신고를 맡기고, 매달 보고까지 받는 세무기장을 상담합니다. 기장료를 계산한 뒤 신청서를 남겨 주시면 담당 세무사가 연락드립니다.</p>' +
+      '<article class="dc dc-main"><span class="dc-tag">세무기장 계약 문의</span><h3>세무기장 상담</h3><p class="dc-desc">장부 정리와 세금 신고를 맡기고, 매달 보고까지 받는 세무기장을 상담합니다. 기장료를 계산한 뒤 신청서를 남겨 주시면 담당자가 연락드립니다.</p>' +
       '<ul class="dc-checks"><li>' + CHECK + '사장님 매출에 맞는 요금제와 예상 기장료를 바로 알려 드립니다.</li><li>' + CHECK + '다른 세무사무소에서 옮겨 오셔도 이전 장부까지 도와 드립니다.</li><li>' + CHECK + '계약 전에도 편하게 물어보세요.</li></ul>' +
       '<button class="btn btn-accent btn-block" type="button" data-go="calc">기장료 계산하고 신청하기' + ARROW + '</button></article>' +
       '<article class="dc"><span class="dc-tag dc-tag-k">카카오톡 채널</span><h3>세금 질문 · 신고 상담</h3><p class="dc-desc">부가가치세·종합소득세 신고, 양도·증여·상속, 창업처럼 궁금한 세금 이야기는 카카오톡 채널로 편하게 물어보세요.</p>' +
@@ -389,14 +389,14 @@
       '<a class="btn btn-kakao btn-block" href="' + KAKAO + '" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-kakao"/></svg>카카오톡 상담</a></article>' +
       '</div>' +
 
-      '<div class="dlg-quick"><p>계산 없이 <b>연락만 받고 싶으세요?</b> 이름과 연락처만 남겨 주시면 담당 세무사가 연락드립니다.</p><button class="btn btn-ghost" type="button" data-go="quick">이름·연락처만 남기기' + ARROW + '</button></div>' +
+      '<div class="dlg-quick"><p>계산 없이 <b>연락만 받고 싶으세요?</b> 이름과 연락처만 남겨 주시면 담당자가 연락드립니다.</p><button class="btn btn-ghost" type="button" data-go="quick">이름·연락처만 남기기' + ARROW + '</button></div>' +
       '<p class="dlg-alt">전화 상담 <a href="tel:0507-1428-6446">0507-1428-6446</a> · 평일 10:00 ~ 17:30</p>' +
       '</div>' +
 
       '<div class="dlg-step" data-step="calc" hidden>' +
       '<button class="dlg-back" type="button" data-back="choose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>창구 다시 고르기</button>' +
       '<p class="dlg-k">1단계 · 기장료 계산</p><h2 class="dlg-h dlg-h-form">먼저 기장료를 확인해 볼까요?</h2>' +
-      '<p class="dlg-lead">계산한 내용이 신청서에 그대로 담겨, 담당 세무사가 더 빨리 안내해 드립니다. 기장 상담이 아니시면 <a href="' + KAKAO + '" target="_blank" rel="noopener">카카오톡</a>이나 전화(0507-1428-6446)로 바로 문의해 주세요.</p>' +
+      '<p class="dlg-lead">계산한 내용이 신청서에 그대로 담겨, 담당자가 더 빨리 안내해 드립니다. 기장 상담이 아니시면 <a href="' + KAKAO + '" target="_blank" rel="noopener">카카오톡</a>이나 전화(0507-1428-6446)로 바로 문의해 주세요.</p>' +
       '<div class="calc-box calc-in-dlg" id="dlg-calc"></div>' +
       '</div>' +
 
@@ -411,7 +411,7 @@
       '<button class="dlg-back dlg-recalc" type="button" data-back="calc"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M8.5 7.5h7M8.5 12h.01M12 12h.01M15.5 12h.01M8.5 16h.01M12 16h.01M15.5 16h.01"/></svg>기장료 다시 계산하기</button>' +
       '<form class="apply" id="apply" action="apply.php" method="POST" accept-charset="UTF-8">' +
       '<p class="dlg-k"><span class="k-calc">2단계 · 상담 신청서</span><span class="k-quick">연락처만 남기기</span></p><h2 class="dlg-h dlg-h-form">상담 신청서</h2>' +
-      '<p class="dlg-when">남겨 주시면 <b>평일 하루 안에</b> 담당 세무사가 연락드립니다. (저녁·주말에 남기시면 다음 평일)</p>' +
+      '<p class="dlg-when">남겨 주시면 <b>평일 하루 안에</b> 담당자가 연락드립니다. (저녁·주말에 남기시면 다음 평일)</p>' +
       '<div class="calc-sum" id="calc-sum"></div>' +
       '<fieldset class="choice" data-key="issue"><legend>가장 궁금한 것 <i>(선택)</i></legend><button type="button">세무대리인 변경·기장</button><button type="button">창업·중소기업 세액감면</button><button type="button">양도·상속·증여 미리 상담</button><button type="button">경비·공제 점검</button><button type="button">기타</button></fieldset>' +
       '<input type="hidden" name="사업 형태" id="f-type"><input type="hidden" name="업종" id="f-ind"><input type="hidden" name="작년 매출" id="f-sales"><input type="hidden" name="장부" id="f-book"><input type="hidden" name="맞는 요금제" id="f-plan"><input type="hidden" name="인건비 신고" id="f-staff"><input type="hidden" name="궁금한 것" id="f-issue">' +
@@ -421,7 +421,7 @@
       '<label class="fld fld-wide"><span>남기실 말씀 <i>(선택)</i></span><textarea name="남기실 말씀" id="f-msg" rows="3" maxlength="1000" placeholder="예) 지금 다른 세무사무소에 맡기고 있는데 옮기고 싶어요"></textarea><span class="fld-note">주민등록번호·계좌번호 같은 정보는 적지 말아 주세요.</span></label>' +
       '</div>' +
       '<label class="agree"><input type="checkbox" name="개인정보 수집·이용 동의" value="동의함" id="f-agree" required><span>개인정보 수집·이용에 동의합니다 <b>(필수)</b></span></label>' +
-      '<p class="agree-note">받는 정보: 이름(상호)·연락처·계산하고 적은 내용 · 쓰는 곳: 상담 연락 · 보관: 상담이 끝나고 1년 뒤 지움 · <a href="privacy.html#apply-info">자세히</a><br>동의하지 않으셔도 카카오톡이나 전화로 상담하실 수 있습니다.</p>' +
+      '<p class="agree-note">받는 정보: 이름(상호)·연락처·계산하고 적은 내용<br>쓰는 곳: 상담 연락<br>보관: 마지막 상담일부터 1년 뒤 지움 · <a href="privacy.html#apply-info">자세히</a><br>동의하지 않으셔도 카카오톡이나 전화로 상담하실 수 있습니다.</p>' +
       '<div class="hp" aria-hidden="true"><label>비워 두세요<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label></div>' +
       '<div class="apply-actions"><button class="btn btn-accent" type="submit" id="apply-send">상담 신청하기' + ARROW + '</button>' +
       '<button class="btn btn-ghost" type="button" id="prep-go"><svg class="ico" aria-hidden="true"><use href="#i-kakao"/></svg>계산 내용 카카오톡으로 보내기</button></div>' +
@@ -431,7 +431,7 @@
       '<p class="dlg-alt">전화 상담 <a href="tel:0507-1428-6446">0507-1428-6446</a> · 평일 10:00 ~ 17:30</p>' +
       '</form></div></div></dialog>';
 
-    var dlg = null, form, pick, hid, msg, send, done, SEND_TEXT, calcData = null, calcMounted = false, quick = false;
+    var dlg = null, form, pick, hid, msg, send, done, SEND_TEXT, calcData = null, calcMounted = false, quick = false, dlgCalc = null;
     function build() {
       if (dlg) return;
       var wrap = document.createElement('div');
@@ -471,7 +471,10 @@
       });
       $('.dlg-x', dlg).addEventListener('click', close);
       $$('[data-go]', dlg).forEach(function (b) { b.addEventListener('click', function () { step(b.getAttribute('data-go')); }); });
-      $$('[data-back]', dlg).forEach(function (b) { b.addEventListener('click', function () { step(b.getAttribute('data-back')); }); });
+      $$('[data-back]', dlg).forEach(function (b) { b.addEventListener('click', function () {
+        var to = b.getAttribute('data-back');
+        if (to === 'calc' && b.closest('[data-step="form"]')) backToCalc(); else step(to);
+      }); });
       dlg.addEventListener('click', function (e) { if (e.target === dlg) close(); });
       dlg.addEventListener('close', function () { document.documentElement.classList.remove('dlg-open'); if (location.hash === '#apply') { try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {} } });
       form.addEventListener('submit', submit);
@@ -479,7 +482,7 @@
     function mountCalc() {
       if (calcMounted || !window.TaxminFee) return;
       calcMounted = true;
-      window.TaxminFee.mount($('#dlg-calc', dlg), {
+      dlgCalc = window.TaxminFee.mount($('#dlg-calc', dlg), {
         applyText: '이 내용으로 상담 신청서 쓰기', submitText: '추천 요금제 보기',
         resultEl: $('#dlg-result', dlg),
         onResult: function (d) { $('#dlg-result-h', dlg).textContent = (d.type === '법인사업자' ? '대표님' : '사장님') + '께 맞는 추천 요금제'; step('result'); },
@@ -492,9 +495,13 @@
       var map = { 'f-type': d.type, 'f-ind': d.industry, 'f-sales': d.sales, 'f-book': d.book, 'f-plan': d.plan + ' ' + (d.est ? '예상 ' : '') + d.price + ' (부가세 별도)', 'f-staff': d.staff };
       Object.keys(map).forEach(function (id) { $('#' + id, dlg).value = map[id]; });
       $('#calc-sum', dlg).innerHTML = '<div class="cs-top"><span>계산한 내용</span><button type="button" data-back2="calc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4.2L19.4 8.8a2.1 2.1 0 0 0 0-3L18.2 4.6a2.1 2.1 0 0 0-3 0L4 15.8z"/><path d="M13.6 6.2l4.2 4.2"/></svg>고치기</button></div>' +
-        '<p class="cs-plan">추천 요금제 <b>' + esc(d.plan) + '</b> · ' + '<span class="nw">' + (d.est ? '예상 ' : '') + esc(d.price) + '</span> <small>부가세 별도</small></p>' +
+        '<p class="cs-plan">추천 요금제 <b>' + esc(d.plan) + '</b> · ' + '<span class="nw">' + (d.est ? '예상 ' : '') + esc(d.price) + '</span> <small>부가세·조정료 별도</small></p>' +
         '<p class="cs-rows">' + [d.type, d.industry, d.sales, '인건비 신고 ' + d.staff].map(esc).join(' · ') + '</p>';
-      $('[data-back2]', dlg).addEventListener('click', function () { step('calc'); });
+      $('[data-back2]', dlg).addEventListener('click', backToCalc);
+    }
+    function backToCalc() {
+      step('calc');
+      if (calcData && calcData.raw && dlgCalc && dlgCalc.restore) dlgCalc.restore(calcData.raw);
     }
     function text() {
       var d = calcData || {};
@@ -577,7 +584,8 @@
       if (/github\.io$/.test(location.hostname)) { say(false, '미리보기 화면이라 신청서가 실제로 보내지지 않습니다. 실제 홈페이지(taxmin.kr)에서 보내 주시거나 카카오톡·전화(0507-1428-6446)로 연락 주세요.'); return; }
       var data = {};
       $$('input, textarea', form).forEach(function (el) {
-        if (!el.name || el.name === '_honey' || (el.type === 'checkbox' && !el.checked)) return;
+        if (!el.name || (el.type === 'checkbox' && !el.checked)) return;
+        if (el.name === '_honey') { data._honey = el.value; return; }
         data[el.name] = el.value.trim() || '-';
       });
       send.disabled = true; send.textContent = '보내는 중…'; msg.hidden = true;
@@ -592,7 +600,7 @@
       }).then(function (res) {
         if (res.ok && String(res.j.success) === 'true') {
           form.reset(); chips();
-          say(true, '상담 신청이 접수되었습니다. 평일 하루 안에 담당 세무사가 연락드리겠습니다.');
+          say(true, '상담 신청이 접수되었습니다. 평일 하루 안에 담당자가 연락드리겠습니다.');
           calcData = null;
           if (quick) $('#f-plan', dlg).value = '계산 없이 연락 요청';
         } else {
