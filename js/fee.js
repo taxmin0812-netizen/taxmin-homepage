@@ -78,7 +78,9 @@
     var EMPTY = '<div class="cr-empty"><p class="cr-k">세무회계 민 기장료</p><ul class="cr-plans">' +
       '<li><span>스탠다드 기장</span><b>월 ' + won(START.standard) + '~</b></li>' +
       '<li><span>법인 기장</span><b>월 ' + won(START.corp) + '~</b></li></ul>' +
-      '<p class="cr-plans-vat">부가세 별도</p><p>내용을 고르고 <b>계산하기</b>를 누르면<br>사장님 매출에 맞는 요금제를 추천해 드려요.</p></div>';
+      '<p class="cr-plans-vat">부가세 별도</p>' +
+      '<div class="cr-incl"><p class="cr-incl-k">모든 요금제에 포함</p><ul><li>장부 기장·부가가치세 신고</li><li>인건비(원천세) 신고</li><li>매달 매출 보고서</li><li>두 세무사가 한 번 더 확인</li></ul></div>' +
+      '<p>내용을 고르고 <b>계산하기</b>를 누르면<br>사장님 매출에 맞는 요금제를 추천해 드려요.</p></div>';
     out.innerHTML = opts.resultEl ? '' : EMPTY;
 
     function num(el) { var v = parseInt(String(el.value).replace(/[^0-9]/g, ''), 10); return isNaN(v) ? 0 : v; }
