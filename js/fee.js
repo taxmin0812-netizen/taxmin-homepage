@@ -76,7 +76,7 @@
     var $ = function (s) { return root.querySelector(s); };
     var st = { type: 'personal', period: 'year', staff: 'no' };
     var EMPTY = '<div class="cr-empty"><p class="cr-k">세무회계 민 기장료</p><ul class="cr-plans">' +
-      '<li><span>스탠다드 기장</span><b>월 ' + won(START.standard) + '~</b></li>' +
+      '<li><span>개인 기장</span><b>월 ' + won(START.standard) + '~</b></li>' +
       '<li><span>법인 기장</span><b>월 ' + won(START.corp) + '~</b></li></ul>' +
       '<p class="cr-plans-vat">부가세 별도</p>' +
       '<div class="cr-incl"><p class="cr-incl-k">모든 요금제에 포함</p><ul><li>장부 기장·부가가치세 신고</li><li>인건비(원천세) 신고</li><li>매달 매출 보고서</li><li>두 세무사가 한 번 더 확인</li></ul></div>' +
@@ -123,7 +123,7 @@
       if (corp) { book = '복식부기(법인)'; plan = '법인 기장'; b = band(BANDS.corp[I[3]], m); }
       else {
         book = I[2] === 0 ? '복식부기 의무(전문직)' : isNew ? '간편장부 대상(신규)' : m >= I[2] ? '복식부기 의무' : '간편장부 대상';
-        plan = '스탠다드 기장'; b = band(BANDS.personal[I[3]], m);
+        plan = '개인 기장'; b = band(BANDS.personal[I[3]], m);
       }
       if (b) {
         add = staffAdd(emp);
