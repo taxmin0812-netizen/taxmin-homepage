@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  var START = { lite: 50000, standard: 70000, corp: 120000 };
+  var START = { standard: 70000, corp: 120000 };
 
   var IND = [
     ['retail', '도소매업 · 무역업', 30000, 'A'],
@@ -32,7 +32,6 @@
       C: [[10000, 120000, 150000], [30000, 150000, 170000], [50000, 170000, 200000], [100000, 200000, 230000]]
     }
   };
-  var LITE_STAFF = 5;
   function band(rows, m) {
     for (var i = 0; i < rows.length; i++) if (m < rows[i][0]) return { lo: rows[i][1], hi: rows[i][2] };
     return { lo: rows[rows.length - 1][2], hi: 0, consult: true };
@@ -118,23 +117,19 @@
       }
       err.hidden = true; $('.f-sales').removeAttribute('aria-invalid');
       var emp = st.staff === 'yes' ? num($('.f-emp')) : 0;
-      var book, plan, liteOk = false, b = null, add = 0;
+      var book, plan, b = null, add = 0;
       if (corp) { book = '복식부기(법인)'; plan = '법인 기장'; b = band(BANDS.corp[I[3]], m); }
       else {
         book = I[2] === 0 ? '복식부기 의무(전문직)' : isNew ? '간편장부 대상(신규)' : m >= I[2] ? '복식부기 의무' : '간편장부 대상';
-        liteOk = false;
-        if (liteOk) plan = '세무회계 민 라이트';
-        else { plan = '스탠다드 기장'; b = band(BANDS.personal[I[3]], m); }
+        plan = '스탠다드 기장'; b = band(BANDS.personal[I[3]], m);
       }
       if (b) {
         add = staffAdd(emp);
         if (emp > 20) b = { lo: b.lo, hi: 0, consult: true };
         b.lo += add; if (b.hi) b.hi += add;
       }
-      var price = liteOk ? '월 ' + won(START.lite) : b.consult ? '월 ' + won(b.lo) + '부터' : '월 ' + man(b.lo) + '~' + won(b.hi);
-      var reco = liteOk
-        ? '사장님께는 <b>' + plan + '</b>를 추천해요. <span class="nw">' + price + '으로</span> 시작하실 수 있어요.' + (emp ? ' 인건비(원천세) 신고도 포함이에요.' : '')
-        : (corp ? '대표님' : '사장님') + '께는 <b>' + plan + '</b>을 추천해요. 예상 금액은 <b class="nw">' + price + '</b>입니다.' + (b.consult ? ' 정확한 금액은 상담 때 정해 드려요.' : '');
+      var price = b.consult ? '월 ' + won(b.lo) + '부터' : '월 ' + man(b.lo) + '~' + won(b.hi);
+      var reco = (corp ? '대표님' : '사장님') + '께는 <b>' + plan + '</b>을 추천해요. 예상 금액은 <b class="nw">' + price + '</b>입니다.' + (b.consult ? ' 정확한 금액은 상담 때 정해 드려요.' : '');
       var sub = [];
       if (b && b.consult) sub.push('상담 후 확정');
       else if (b) sub.push('예상');
@@ -143,7 +138,7 @@
       var data = {
         type: corp ? '법인사업자' : '개인사업자', industry: I[1],
         sales: isNew ? '올해 신규' + (m ? ' (' + eok(m) + ')' : '') : '연 ' + eok(m),
-        salesMan: m, book: book, plan: plan, price: price, est: !liteOk, staff: staffText()
+        salesMan: m, book: book, plan: plan, price: price, est: true, staff: staffText()
       };
       var rows = [['사업자', data.type], ['업종', data.industry], ['매출', data.sales], ['인건비 신고', data.staff]];
       out.innerHTML = '<div class="cr-card">' +
