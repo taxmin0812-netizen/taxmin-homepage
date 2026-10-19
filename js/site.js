@@ -76,6 +76,39 @@
   document.addEventListener('min:intro-done', onScroll);
   onScroll();
 
+  (function () {
+    if (!(window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches)) return;
+    var pop = null, from = null;
+    function hide() { if (pop && !pop.hidden) { pop.hidden = true; if (from) from.setAttribute('aria-expanded', 'false'); } }
+    function place(a) {
+      var r = a.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight;
+      var x = Math.max(12, Math.min(window.innerWidth - w - 12, r.left + r.width / 2 - w / 2));
+      var y = r.bottom + 10; if (y + h > window.innerHeight - 12) y = Math.max(12, r.top - h - 10);
+      pop.style.left = x + 'px'; pop.style.top = y + 'px';
+    }
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href^="tel:"]');
+      if (!a || a.closest('dialog') || /\d{3,}/.test(a.textContent)) { if (pop && !(e.target.closest && e.target.closest('.tel-pop'))) hide(); return; }
+      e.preventDefault();
+      var num = a.getAttribute('href').replace('tel:', '');
+      if (!pop) {
+        pop = document.createElement('div'); pop.className = 'tel-pop'; pop.hidden = true; pop.setAttribute('role', 'status');
+        document.body.appendChild(pop);
+      }
+      if (!pop.hidden && from === a) { hide(); return; }
+      pop.innerHTML = '<p class="tp-k">전화 상담</p><p class="tp-num">' + num + '</p><p class="tp-time">평일 10:00~17:30</p><button type="button" class="tp-copy">번호 복사</button>';
+      pop.querySelector('.tp-copy').addEventListener('click', function () {
+        var b = this, ok = function () { b.textContent = '복사했어요'; };
+        if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(num).then(ok, function () {}); else ok();
+      });
+      pop.hidden = false; place(a);
+      from = a; a.setAttribute('aria-expanded', 'true');
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hide(); });
+    window.addEventListener('scroll', hide, { passive: true });
+    window.addEventListener('resize', hide);
+  })();
+
   var menuBtn = $('.menu-btn'), menu = $('#mobile-menu');
   if (menuBtn && menu) {
     var closeMenu = function () { menuBtn.setAttribute('aria-expanded', 'false'); menuBtn.setAttribute('aria-label', '메뉴 열기'); menu.hidden = true; header.classList.remove('menu-open'); document.body.style.overflow = ''; };
@@ -355,6 +388,8 @@
       '<ul class="dc-checks"><li>' + CHECK + '궁금할 때 카카오톡으로 바로 물어보세요.</li><li>' + CHECK + '영수증·자료 사진도 카카오톡으로 바로 보낼 수 있습니다.</li></ul>' +
       '<a class="btn btn-kakao btn-block" href="' + KAKAO + '" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-kakao"/></svg>카카오톡 상담</a></article>' +
       '</div>' +
+
+      '<div class="dlg-quick"><p>계산 없이 <b>연락만 받고 싶으세요?</b> 이름과 연락처만 남겨 주시면 담당 세무사가 연락드립니다.</p><button class="btn btn-ghost" type="button" data-go="quick">이름·연락처만 남기기' + ARROW + '</button></div>' +
       '<p class="dlg-alt">전화 상담 <a href="tel:0507-1428-6446">0507-1428-6446</a> · 평일 10:00 ~ 17:30</p>' +
       '</div>' +
 
@@ -372,9 +407,11 @@
       '</div>' +
 
       '<div class="dlg-step" data-step="form" hidden>' +
+      '<button class="dlg-back dlg-qback" type="button" data-back="choose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>창구 다시 고르기</button>' +
       '<button class="dlg-back dlg-recalc" type="button" data-back="calc"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M8.5 7.5h7M8.5 12h.01M12 12h.01M15.5 12h.01M8.5 16h.01M12 16h.01M15.5 16h.01"/></svg>기장료 다시 계산하기</button>' +
       '<form class="apply" id="apply" action="apply.php" method="POST" accept-charset="UTF-8">' +
-      '<p class="dlg-k">2단계 · 상담 신청서</p><h2 class="dlg-h dlg-h-form">상담 신청서</h2>' +
+      '<p class="dlg-k"><span class="k-calc">2단계 · 상담 신청서</span><span class="k-quick">연락처만 남기기</span></p><h2 class="dlg-h dlg-h-form">상담 신청서</h2>' +
+      '<p class="dlg-when">남겨 주시면 <b>평일 하루 안에</b> 담당 세무사가 연락드립니다. (저녁·주말에 남기시면 다음 평일)</p>' +
       '<div class="calc-sum" id="calc-sum"></div>' +
       '<fieldset class="choice" data-key="issue"><legend>가장 궁금한 것 <i>(선택)</i></legend><button type="button">세무대리인 변경·기장</button><button type="button">창업·중소기업 세액감면</button><button type="button">양도·상속·증여 미리 상담</button><button type="button">경비·공제 점검</button><button type="button">기타</button></fieldset>' +
       '<input type="hidden" name="사업 형태" id="f-type"><input type="hidden" name="업종" id="f-ind"><input type="hidden" name="작년 매출" id="f-sales"><input type="hidden" name="장부" id="f-book"><input type="hidden" name="맞는 요금제" id="f-plan"><input type="hidden" name="인건비 신고" id="f-staff"><input type="hidden" name="궁금한 것" id="f-issue">' +
@@ -394,7 +431,7 @@
       '<p class="dlg-alt">전화 상담 <a href="tel:0507-1428-6446">0507-1428-6446</a> · 평일 10:00 ~ 17:30</p>' +
       '</form></div></div></dialog>';
 
-    var dlg = null, form, pick, hid, msg, send, done, SEND_TEXT, calcData = null, calcMounted = false;
+    var dlg = null, form, pick, hid, msg, send, done, SEND_TEXT, calcData = null, calcMounted = false, quick = false;
     function build() {
       if (dlg) return;
       var wrap = document.createElement('div');
@@ -446,7 +483,7 @@
         applyText: '이 내용으로 상담 신청서 쓰기', submitText: '추천 요금제 보기',
         resultEl: $('#dlg-result', dlg),
         onResult: function (d) { $('#dlg-result-h', dlg).textContent = (d.type === '법인사업자' ? '대표님' : '사장님') + '께 맞는 추천 요금제'; step('result'); },
-        onApply: function (d) { setCalc(d); step('form'); }
+        onApply: function (d) { quick = false; setCalc(d); step('form'); }
       });
     }
     function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -487,11 +524,18 @@
       try { msg.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) {}
     }
     function step(name) {
-      if (name === 'form' && !calcData) name = 'calc';
+      if (name === 'quick') {
+        quick = true; calcData = null;
+        ['f-type', 'f-ind', 'f-sales', 'f-book', 'f-staff'].forEach(function (id) { $('#' + id, dlg).value = ''; });
+        $('#f-plan', dlg).value = '계산 없이 연락 요청';
+        name = 'form';
+      } else if (name === 'calc' || name === 'choose') quick = false;
+      if (name === 'form' && !calcData && !quick) name = 'calc';
       if (name === 'result' && !$('#dlg-result .cr-card', dlg)) name = 'calc';
       if (name === 'calc') mountCalc();
       $$('.dlg-step', dlg).forEach(function (el) { el.hidden = el.getAttribute('data-step') !== name; });
       dlg.classList.toggle('is-form', name === 'form');
+      dlg.classList.toggle('is-quick', quick && name === 'form');
       dlg.setAttribute('data-step', name);
       dlg.scrollTop = 0;
       var h = $('.dlg-step[data-step="' + name + '"] h2', dlg);
@@ -510,6 +554,7 @@
     function open(opts) {
       opts = opts || {};
       build();
+      quick = false;
       msg.hidden = true; done.hidden = true;
       if (opts.calc) setCalc(opts.calc);
       step(opts.calc ? 'form' : (opts.step === 'form' || opts.step === 'calc') ? opts.step : 'choose');
@@ -547,8 +592,9 @@
       }).then(function (res) {
         if (res.ok && String(res.j.success) === 'true') {
           form.reset(); chips();
-          say(true, '상담 신청이 접수되었습니다. 확인하는 대로 연락드리겠습니다.');
+          say(true, '상담 신청이 접수되었습니다. 평일 하루 안에 담당 세무사가 연락드리겠습니다.');
           calcData = null;
+          if (quick) $('#f-plan', dlg).value = '계산 없이 연락 요청';
         } else {
           say(false, '지금은 신청서를 보내지 못했습니다. 카카오톡이나 전화(0507-1428-6446)로 연락 주세요.');
         }
