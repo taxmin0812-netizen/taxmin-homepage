@@ -373,7 +373,7 @@
 
       '<div class="dlg-step" data-step="form" hidden>' +
       '<button class="dlg-back dlg-recalc" type="button" data-back="calc"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M8.5 7.5h7M8.5 12h.01M12 12h.01M15.5 12h.01M8.5 16h.01M12 16h.01M15.5 16h.01"/></svg>기장료 다시 계산하기</button>' +
-      '<form class="apply" id="apply" action="https://formsubmit.co/tax-min@naver.com" method="POST" accept-charset="UTF-8">' +
+      '<form class="apply" id="apply" action="apply.php" method="POST" accept-charset="UTF-8">' +
       '<p class="dlg-k">2단계 · 상담 신청서</p><h2 class="dlg-h dlg-h-form">상담 신청서</h2>' +
       '<div class="calc-sum" id="calc-sum"></div>' +
       '<fieldset class="choice" data-key="issue"><legend>가장 궁금한 것 <i>(선택)</i></legend><button type="button">세무대리인 변경·기장</button><button type="button">창업·중소기업 세액감면</button><button type="button">양도·상속·증여 미리 상담</button><button type="button">경비·공제 점검</button><button type="button">기타</button></fieldset>' +
@@ -386,7 +386,6 @@
       '<label class="agree"><input type="checkbox" name="개인정보 수집·이용 동의" value="동의함" id="f-agree" required><span>개인정보 수집·이용에 동의합니다 <b>(필수)</b></span></label>' +
       '<p class="agree-note">받는 정보: 이름(상호)·연락처·계산하고 적은 내용 · 쓰는 곳: 상담 연락 · 보관: 상담이 끝나고 1년 뒤 지움 · <a href="privacy.html#apply-info">자세히</a><br>동의하지 않으셔도 카카오톡이나 전화로 상담하실 수 있습니다.</p>' +
       '<div class="hp" aria-hidden="true"><label>비워 두세요<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label></div>' +
-      '<input type="hidden" name="_subject" value="[택스민 홈페이지] 상담 신청"><input type="hidden" name="_template" value="table">' +
       '<div class="apply-actions"><button class="btn btn-accent" type="submit" id="apply-send">상담 신청하기' + ARROW + '</button>' +
       '<button class="btn btn-ghost" type="button" id="prep-go"><svg class="ico" aria-hidden="true"><use href="#i-kakao"/></svg>계산 내용 카카오톡으로 보내기</button></div>' +
       '<p class="apply-msg" id="apply-msg" role="status" aria-live="polite" hidden></p>' +
@@ -530,16 +529,15 @@
       if (!form.checkValidity()) { form.reportValidity(); return; }
       var hp = form.querySelector('input[name="_honey"]');
       if (hp && hp.value) { form.reset(); chips(); say(true, '상담 신청이 접수되었습니다.'); return; }
+      if (/github\.io$/.test(location.hostname)) { say(false, '미리보기 화면이라 신청서가 실제로 보내지지 않습니다. 실제 홈페이지(taxmin.kr)에서 보내 주시거나 카카오톡·전화(0507-1428-6446)로 연락 주세요.'); return; }
       var data = {};
       $$('input, textarea', form).forEach(function (el) {
         if (!el.name || el.name === '_honey' || (el.type === 'checkbox' && !el.checked)) return;
         data[el.name] = el.value.trim() || '-';
       });
-      data._subject = '[택스민 홈페이지] 상담 신청 — ' + ($('#f-name', form).value.trim() || '이름 없음');
-      data['보낸 곳'] = 'taxmin.kr 상담 신청서';
       send.disabled = true; send.textContent = '보내는 중…'; msg.hidden = true;
       var ac = window.AbortController ? new AbortController() : null, tmo = ac ? setTimeout(function () { ac.abort(); }, 15000) : 0;
-      fetch(form.getAttribute('action').replace('formsubmit.co/', 'formsubmit.co/ajax/'), {
+      fetch(form.getAttribute('action'), {
         method: 'POST',
         signal: ac ? ac.signal : undefined,
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
