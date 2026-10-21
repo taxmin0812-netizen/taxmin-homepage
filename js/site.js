@@ -77,6 +77,48 @@
   onScroll();
 
   (function () {
+    var KEY = 'minSrc', DAY = 864e5;
+    function label() {
+      var q, g;
+      try { q = new URLSearchParams(location.search); } catch (e) { return ''; }
+      g = function (k) { return (q.get(k) || '').trim().slice(0, 60); };
+      var kw = g('n_keyword') || g('n_query') || g('utm_term');
+      if (g('n_media') || g('n_ad') || g('n_keyword') || g('n_query')) return '네이버 검색광고' + (kw ? ' · 키워드 ' + kw : '');
+      if (g('gclid')) return '구글 광고' + (kw ? ' · 키워드 ' + kw : '');
+      if (g('utm_source')) return [g('utm_source'), g('utm_medium'), g('utm_campaign')].filter(Boolean).join(' / ') + (kw ? ' · 키워드 ' + kw : '');
+      if (g('fbclid')) return '인스타그램·페이스북 링크';
+      var r = '';
+      try { r = document.referrer ? new URL(document.referrer).hostname : ''; } catch (e) {}
+      if (!r || r === location.hostname) return '';
+      if (/(^|\.)search\.naver\.com$/.test(r)) return '네이버 검색';
+      if (/blog\.naver\.com$/.test(r)) return '네이버 블로그';
+      if (/naver\.com$/.test(r)) return '네이버(' + r + ')';
+      if (/(^|\.)google\./.test(r)) return '구글 검색';
+      if (/daum\.net$/.test(r)) return '다음 검색';
+      if (/youtube\.com$|youtu\.be$/.test(r)) return '유튜브';
+      if (/instagram\.com$/.test(r)) return '인스타그램';
+      if (/kakao\.com$/.test(r)) return '카카오';
+      if (/daangn\.com$|karrotmarket/.test(r)) return '당근';
+      return '다른 사이트(' + r + ')';
+    }
+    var now = Date.now(), cur = label(), first = null;
+    try { first = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
+    if (first && (!first.t || now - first.t > 30 * DAY)) first = null;
+    try {
+      if (cur && !first) { first = { s: cur, t: now }; localStorage.setItem(KEY, JSON.stringify(first)); }
+      if (cur) sessionStorage.setItem(KEY, cur);
+    } catch (e) {}
+    window.TaxminSource = function () {
+      var last = '';
+      try { last = sessionStorage.getItem(KEY) || ''; } catch (e) {}
+      var f = first ? first.s + ' (' + new Date(first.t).toLocaleDateString('ko-KR') + ')' : '';
+      if (!f && !last) return '직접 방문(주소 입력·즐겨찾기 등)';
+      if (f && last && first.s !== last) return '처음: ' + f + ' / 이번: ' + last;
+      return f || last;
+    };
+  })();
+
+  (function () {
     if (!(window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches)) return;
     var pop = null, from = null;
     function hide() { if (pop && !pop.hidden) { pop.hidden = true; if (from) from.setAttribute('aria-expanded', 'false'); } }
@@ -414,14 +456,14 @@
       '<p class="dlg-when">남겨 주시면 <b>평일 하루 안에</b> 담당자가 연락드립니다. (저녁·주말에 남기시면 다음 평일)</p>' +
       '<div class="calc-sum" id="calc-sum"></div>' +
       '<fieldset class="choice" data-key="issue"><legend>가장 궁금한 것 <i>(선택)</i></legend><button type="button">세무대리인 변경·기장</button><button type="button">창업·중소기업 세액감면</button><button type="button">양도·상속·증여 미리 상담</button><button type="button">경비·공제 점검</button><button type="button">기타</button></fieldset>' +
-      '<input type="hidden" name="사업 형태" id="f-type"><input type="hidden" name="업종" id="f-ind"><input type="hidden" name="작년 매출" id="f-sales"><input type="hidden" name="장부" id="f-book"><input type="hidden" name="맞는 요금제" id="f-plan"><input type="hidden" name="인건비 신고" id="f-staff"><input type="hidden" name="궁금한 것" id="f-issue">' +
+      '<input type="hidden" name="사업 형태" id="f-type"><input type="hidden" name="업종" id="f-ind"><input type="hidden" name="작년 매출" id="f-sales"><input type="hidden" name="장부" id="f-book"><input type="hidden" name="맞는 요금제" id="f-plan"><input type="hidden" name="인건비 신고" id="f-staff"><input type="hidden" name="궁금한 것" id="f-issue"><input type="hidden" name="들어온 경로" id="f-src">' +
       '<div class="fields">' +
       '<label class="fld"><span>이름 또는 상호 <b aria-hidden="true">*</b></span><input name="이름" id="f-name" required maxlength="40" autocomplete="name" placeholder="홍길동 / 길동상회"></label>' +
       '<label class="fld"><span>연락처 <b aria-hidden="true">*</b></span><input name="연락처" id="f-tel" type="tel" required maxlength="20" autocomplete="tel" inputmode="tel" pattern="[0-9 +\\-\\(\\)]{9,20}" placeholder="010-0000-0000"></label>' +
       '<label class="fld fld-wide"><span>남기실 말씀 <i>(선택)</i></span><textarea name="남기실 말씀" id="f-msg" rows="3" maxlength="1000" placeholder="예) 지금 다른 세무사무소에 맡기고 있는데 옮기고 싶어요"></textarea><span class="fld-note">주민등록번호·계좌번호 같은 정보는 적지 말아 주세요.</span></label>' +
       '</div>' +
       '<label class="agree"><input type="checkbox" name="개인정보 수집·이용 동의" value="동의함" id="f-agree" required><span>개인정보 수집·이용에 동의합니다 <b>(필수)</b></span></label>' +
-      '<p class="agree-note">받는 정보: 이름(상호)·연락처·계산하고 적은 내용<br>쓰는 곳: 상담 연락<br>보관: 마지막 상담일부터 1년 뒤 지움 · <a href="privacy.html#apply-info">자세히</a><br>동의하지 않으셔도 카카오톡이나 전화로 상담하실 수 있습니다.</p>' +
+      '<p class="agree-note">받는 정보: 이름(상호)·연락처·계산하고 적은 내용·들어온 경로<br>쓰는 곳: 상담 연락<br>보관: 마지막 상담일부터 1년 뒤 지움 · <a href="privacy.html#apply-info">자세히</a><br>동의하지 않으셔도 카카오톡이나 전화로 상담하실 수 있습니다.</p>' +
       '<div class="hp" aria-hidden="true"><label>비워 두세요<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label></div>' +
       '<div class="apply-actions"><button class="btn btn-accent" type="submit" id="apply-send">상담 신청하기' + ARROW + '</button>' +
       '<button class="btn btn-ghost" type="button" id="prep-go"><svg class="ico" aria-hidden="true"><use href="#i-kakao"/></svg>계산 내용 카카오톡으로 보내기</button></div>' +
@@ -579,6 +621,7 @@
       e.preventDefault();
       var tel = $('#f-tel', form); tel.setCustomValidity(tel.validity.patternMismatch ? '010-0000-0000처럼 숫자로 적어 주세요.' : '');
       if (!form.checkValidity()) { form.reportValidity(); return; }
+      var srcEl = $('#f-src', form); if (srcEl && window.TaxminSource) srcEl.value = window.TaxminSource();
       var hp = form.querySelector('input[name="_honey"]');
       if (hp && hp.value) { form.reset(); chips(); say(true, '상담 신청이 접수되었습니다.'); return; }
       if (/github\.io$/.test(location.hostname)) { say(false, '미리보기 화면이라 신청서가 실제로 보내지지 않습니다. 실제 홈페이지(taxmin.kr)에서 보내 주시거나 카카오톡·전화(0507-1428-6446)로 연락 주세요.'); return; }
