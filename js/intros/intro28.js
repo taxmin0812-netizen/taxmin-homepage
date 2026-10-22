@@ -192,16 +192,18 @@
     x.restore();
     x.strokeStyle = 'rgba(255,255,255,.12)'; x.lineWidth = 3; x.strokeRect(34, 34, w - 68, h - 68);
 
-    var mk = new Path2D(MIN_MARK.d), wa = new Path2D(MIN_WM.a), wb = new Path2D(MIN_WM.b);
-    var ms = 300 / MIN_MARK.w, mx = w / 2 - 150, my = h * 0.40 - 150;
+    var ICON_M = new Path2D('M36 134V94a24 24 0 0 1 48 0v40M84 94c0-13 10.5-21 23-21c8 0 13.5 4 19 9.5L141 97'), ICON_C = new Path2D('M136 129L170 95');
+    var s = 2.35, ox = w / 2 - 102.75 * s, oy = h * 0.40 - 102 * s;
+    var wa = new Path2D(MIN_WM.a), wb = new Path2D(MIN_WM.b);
     var ts = 500 / MIN_WM.w, tx = w / 2 - 250, ty = h * 0.70 - MIN_WM.h * ts / 2;
-    function logo(dx, dy, ca, cb) {
-      x.save(); x.translate(mx + dx, my + dy); x.scale(ms, ms); x.fillStyle = ca; x.fill(mk, 'evenodd'); x.restore();
+    function logo(dx, dy, mc, cc, ca, cb) {
+      x.save(); x.translate(ox + dx, oy + dy); x.scale(s, s); x.lineCap = 'round'; x.lineJoin = 'round';
+      x.strokeStyle = mc; x.lineWidth = 27; x.stroke(ICON_M); x.strokeStyle = cc; x.lineWidth = 26; x.stroke(ICON_C); x.restore();
       x.save(); x.translate(tx + dx, ty + dy); x.scale(ts, ts); x.fillStyle = ca; x.fill(wa, 'evenodd'); x.fillStyle = cb; x.fill(wb, 'evenodd'); x.restore();
     }
-    logo(0, 6, 'rgba(0,0,0,.35)', 'rgba(0,0,0,.35)');
-    logo(0, -2, 'rgba(255,255,255,.25)', 'rgba(255,255,255,.2)');
-    logo(0, 0, '#FFFFFF', '#9DB8FF');
+    logo(0, 6, 'rgba(0,0,0,.35)', 'rgba(0,0,0,.35)', 'rgba(0,0,0,.35)', 'rgba(0,0,0,.35)');
+    logo(0, -2, 'rgba(255,255,255,.25)', 'rgba(255,255,255,.2)', 'rgba(255,255,255,.25)', 'rgba(255,255,255,.2)');
+    logo(0, 0, '#FFFFFF', CHECK, '#FFFFFF', '#9DB8FF');
     return c;
   }
   function texFrom(cv) {
